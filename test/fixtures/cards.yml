@@ -1,0 +1,15 @@
+one:
+  name: "Pikachu"
+  card_number: "25"
+  energy_type: "Electric"
+  expansion: "Base Set"
+  rarity: "Rare"
+  release_year: 1999
+
+two:
+  name: "Charizard"
+  card_number: "4"
+  energy_type: "Fire"
+  expansion: "Base Set"
+  rarity: "Rare Holo"
+  release_year: 1999

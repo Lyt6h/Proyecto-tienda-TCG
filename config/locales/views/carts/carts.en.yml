@@ -1,0 +1,14 @@
+en:
+  cart:
+    title: "Your bag"
+    card: "CARD"
+    price: "PRICE"
+    quantity: "QTY"
+    action: "ACTION"
+    drop: "Drop"
+    total: "TOTAL"
+    subtotal: "SUBTOTAL"
+    service_fee: "SERVICE FEE"
+    empty: "Your bag is empty..."
+    back_to_store: "Back to store"
+    pay_all: "Pay all"

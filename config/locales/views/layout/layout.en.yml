@@ -1,0 +1,88 @@
+en:
+  layout:
+    sign_out: "Sign out"
+    sign_in: "Sign in"
+    sign_up: "Sign up"
+    sell: "Sell"
+    buy: "Buy"
+    my_cards: "My Cards"
+    publish_new_card: "Publish New Card"
+    language: "Language"
+    profile: "Your profile"
+    coming_soon: "Coming soon"
+    spanish: "Spanish"
+    english: "English"
+    my_purchases: "My Purchases 📦"
+    my_sales: "My Sales 💰"
+    logout_success_title: "SESSION CLOSED!"
+    logout_success_body: "You have logged out successfully. Come back soon to your Pokémon adventure!"
+    
+  products:
+    form:
+      name: "POKÉMON NAME"
+      energy: "ENERGY TYPE"
+      description: "DESCRIPTION"
+      price: "PRICE ($)"
+      stock: "QUANTITY"
+      psa: "CONDITION"
+      rarity: "RARITY"
+      year: "RELEASE YEAR"
+      placeholder_name: "Ex: Charizard"
+      placeholder_desc: "Card details..."
+    titles:
+      sell: "PUBLISH CARD"
+      edit: "EDIT CARD"
+    actions:
+      edit: "EDIT"
+      delete: "DELETE"
+      save: "SAVE TO BAG"
+      cancel: "CANCEL"
+      confirm_delete: "Are you sure you want to release this card?"
+      no_cards: "You don't have any published cards yet."
+    notices:
+      created: "Card published successfully!"
+      updated: "Card updated successfully!"
+      deleted: "Card removed from your bag!"
+      
+  favorites:
+    title: "My Wishlist ⭐️"
+    best_price: "Best price:"
+    add_to_cart: "Add to cart 🛒"
+    out_of_stock: "🚫 OUT OF STOCK FOR NOW"
+    remove: "Remove 🗑️"
+    empty: "You have no saved cards."
+    go_search: "Go find cards!"
+    back: "Back to Store"
+
+  purchases:
+    title: "My Purchases 📦"
+    empty: "You haven't made any purchases yet."
+    go_shop: "Go to Store!"
+    back: "Back to Store"
+    order: "Order"
+    quantity: "Qty"
+    total: "Total"
+    leave_review: "Leave Review ✍️"
+    reviews_title: "Buyer Reviews 💬"
+    rating: "Rating"
+    no_reviews: "This card has no reviews yet. Be the first to purchase it and leave a review!"
+
+  api:
+    title: "CARD SEARCH (OFFICIAL API)"
+    placeholder_search: "e.g., Pikachu, Lugia, Rayquaza..."
+    search: "SEARCH"
+    go_back: "go back to my products"
+
+  checkout:
+    success_title: "Request Sent! 🚀"
+    success_body: "Your purchase request has been sent to the seller. We will notify you once it is accepted so your Pokémon adventure can continue."
+    go_purchases: "Go to My Purchases 📦"
+    close: "Close"
+
+  reviews:
+    new_title: "Leave Review ✍️"
+    item_label: "Card Stars:"
+    seller_label: "Seller Stars:"
+    comment_label: "Your Comment:"
+    submit: "Save Review"
+    cancel: "Cancel"

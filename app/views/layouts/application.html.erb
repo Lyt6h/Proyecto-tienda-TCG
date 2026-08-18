@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= content_for(:title) || "Grupo97" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="Grupo97">
+    <meta name="mobile-web-app-capable" content="yes">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= yield :head %>
+    
+    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
+    
+    <link rel="icon" href="/icon.png" type="image/png">
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/icon.png">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+
+    <style>
+      .auth-btn-notorious {
+        animation: pulse-notorious 2s infinite;
+        transition: all 0.2s ease;
+      }
+      
+      @keyframes pulse-notorious {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+        100% { transform: scale(1); }
+      }
+
+      .auth-btn-notorious:hover {
+        animation: none;
+        transform: scale(1.1) translate(-2px, -2px) !important;
+        box-shadow: 6px 6px 0px black !important;
+      }
+
+      .cropper-view-box,
+      .cropper-face {
+        border-radius: 50%;
+      }
+
+      @keyframes cart-bounce {
+        0%   { transform: translateY(0)     scale(1); }
+        20%  { transform: translateY(0)     scale(1.15, 0.85); }
+        40%  { transform: translateY(-22px) scale(0.9, 1.1); }
+        60%  { transform: translateY(0)     scale(1.1, 0.9); }
+        75%  { transform: translateY(-10px) scale(0.95, 1.05); }
+        90%  { transform: translateY(0)     scale(1.03, 0.97); }
+        100% { transform: translateY(0)     scale(1); }
+      }
+
+      .cart-bounce {
+        animation: cart-bounce 0.7s cubic-bezier(0.36, 0.07, 0.19, 0.97);
+      }
+    </style>
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+    </head>
+  <body data-controller="cart-bounce" class="<%= 'no-header' unless controller_name == 'products' && action_name == 'index' %>">
+    <% if controller_name == "products" && action_name == "index" %>
+      <%= render "layouts/header" %>
+    <% end %>
+    
+    <% flash.each do |type, message| %>
+      <% next if type == "alert" && (controller_name == "sessions" || controller_name == "registrations") %>
+      <% next if %w[show_incomplete_profile_modal checkout_success show_logout_modal].include?(type.to_s) %>
+      <% background_color = (type == "alert" || type == "error") ? "#E3350D" : "#30a7d7" %>
+      <div style="background-color: <%= background_color %>; color: white; text-align: center; padding: 10px; font-family: 'Press Start 2P', cursive; font-size: 8px; position: absolute; top: 0; width: 100%; z-index: 100;">
+        <%= message %>
+      </div>
+    <% end %>
+    
+    <% if content_for?(:back_link) %>
+      <div style="position: fixed; top: 20px; left: 30px; z-index: 1000;">
+        <%= link_to content_for(:back_link), class: "back-button-retro", style: "
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: white;
+          border: 3px solid black;
+          width: 48px;
+          height: 48px;
+          border-radius: 5px;
+          box-shadow: 4px 4px 0px black;
+          text-decoration: none;
+          transition: all 0.1s;
+          cursor: pointer;
+        " do %>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">
+            <path d="M15 18l-6-6 6-6" stroke="black" stroke-width="3" stroke-linecap="square"/>
+          </svg>
+        <% end %>
+      </div>
+
+      <style>
+        .back-button-retro:hover {
+          transform: translate(-2px, -2px);
+          box-shadow: 6px 6px 0px black;
+          background: #f0f0f0;
+        }
+        .back-button-retro:active {
+          transform: translate(2px, 2px);
+          box-shadow: 2px 2px 0px black;
+        }
+      </style>
+    <% end %>
+
+    <nav style="position: fixed; top: <%= controller_name == 'products' && action_name == 'index' ? '150px' : '20px' %>; right: 30px; z-index: 999; display: flex; align-items: center; gap: 15px;">
+      <% if authenticated? %>
+        <% if !Current.user.is_admin? && controller_name != 'support' %>
+          <div style="position: relative; display: inline-block;" class="btn-interactive">
+            <%= link_to t("layout.my_purchases", default: "Mis Compras 📦"), purchases_path, style: 'background: #4CAF50; color: white; border: 3px solid black; padding: 12px 15px; cursor: pointer; font-family: "Press Start 2P", cursive; font-size: 8px; border-radius: 5px; text-decoration: none;', class: "btn-interactive" %>
+            <% if Order.where(client: Current.user, buyer_notification_seen: false).where.not(status: "pending_approval").exists? %>
+              <span style="position: absolute; top: -8px; right: -8px; background: #E3350D; color: white; border: 2px solid black; border-radius: 50%; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; font-family: 'Press Start 2P', cursive; font-size: 10px; z-index: 10;">!</span>
+            <% end %>
+          </div>
+
+          <div style="position: relative; display: inline-block;" class="btn-interactive">
+            <%= link_to t("layout.my_sales", default: "Mis Ventas 💰"), sales_path, style: 'background: #FF5722; color: white; border: 3px solid black; padding: 12px 15px; cursor: pointer; font-family: "Press Start 2P", cursive; font-size: 8px; border-radius: 5px; text-decoration: none;', class: "btn-interactive" %>
+            <% pending_sales_count = Order.where(seller: Current.user, status: "pending_approval").count %>
+            <% if pending_sales_count > 0 %>
+              <span style="position: absolute; top: -8px; right: -8px; background: #E3350D; color: white; border: 2px solid black; border-radius: 50%; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; font-family: 'Press Start 2P', cursive; font-size: 8px; z-index: 10;">
+                <%= pending_sales_count %>
+              </span>
+            <% end %>
+          </div>
+
+          <%= link_to "Wishlist ❤️", favorites_path, style: 'background: #30a7d7; color: white; border: 3px solid black; padding: 12px 15px; cursor: pointer; font-family: "Press Start 2P", cursive; font-size: 8px; border-radius: 5px; text-decoration: none;', class: "btn-interactive" %>
+          <% if controller_name == "products" && action_name == "index" %>
+            <%= link_to t("layout.sell"), my_products_products_path, style: "background: #FFCC00; color: black; border: 3px solid black; padding: 12px 15px; cursor: pointer; font-family: 'Press Start 2P', cursive; font-size: 8px; border-radius: 5px; text-decoration: none;", class: "btn-interactive" %>
+          <% else %>
+            <%= link_to t("layout.buy"), products_path, style: "background: #FFCC00; color: black; border: 3px solid black; padding: 12px 15px; cursor: pointer; font-family: 'Press Start 2P', cursive; font-size: 8px; border-radius: 5px; text-decoration: none;", class: "btn-interactive" %>
+          <% end %>
+
+          <%= link_to cart_path, id: "cart-bag-btn", class: "btn-interactive", style: "text-decoration: none; position: relative; background: rgba(255,255,255,0.8); padding: 10px; border-radius: 50%; border: 3px solid black; display: flex; align-items: center; justify-content: center; width: 50px; height: 50px;" do %>
+            <%= image_tag "bag.png", style: "width: 60px; height: 60px; image-rendering: pixelated;", alt: "Cart" %>
+            <span id="cart-badge" class="cart-badge" style="position: absolute; top: -10px; right: -10px; background: #E3350D; color: white; border: 2px solid black; border-radius: 50%; padding: 2px 8px; font-family: 'Press Start 2P', cursive; font-size: 10px;">
+              <%= Current.user&.cart&.total_quantity || 0 %>
+            </span>
+          <% end %>
+        <% end %>
+      <% else %>
+        <% unless controller_name.in?(%w[sessions registrations passwords support]) %>
+          <%= link_to t("layout.sign_in", default: "Iniciar Sesión"), new_session_path, style: 'background: #4CAF50; color: white; border: 4px solid black; padding: 15px 25px; cursor: pointer; font-family: "Press Start 2P", cursive; font-size: 10px; border-radius: 8px; text-decoration: none; box-shadow: 4px 4px 0px black;', class: "btn-interactive auth-btn-notorious" %>
+          <%= link_to t("layout.sign_up", default: "Registrarse"), new_registration_path, style: 'background: #30a7d7; color: white; border: 4px solid black; padding: 15px 25px; cursor: pointer; font-family: "Press Start 2P", cursive; font-size: 10px; border-radius: 8px; text-decoration: none; box-shadow: 4px 4px 0px black;', class: "btn-interactive auth-btn-notorious" %>
+        <% end %>
+      <% end %>
+    </nav>
+
+    <%= yield %>
+
+    <% unless controller_name == 'support' %>
+      <div style="position: fixed; bottom: 30px; right: 30px; z-index: 999; display: flex; flex-direction: column; align-items: flex-end; gap: 10px;">
+        <div id="settings-menu" style="display: none; background: white; border: 3px solid black; padding: 15px; box-shadow: 4px 4px 0px black; border-radius: 5px; flex-direction: column; gap: 12px; min-width: 180px; position: relative;">
+          <%# Close button in the corner - Red Chevron Down %>
+          <button onclick="toggleSettings()" style="position: absolute; top: 5px; right: 5px; background: none; border: none; cursor: pointer; padding: 5px; display: flex; align-items: center; justify-content: center; outline: none;">
+            <svg width="14" height="10" viewBox="0 0 14 10" shape-rendering="crispEdges">
+              <path d="M0 0h2v2H0V0zm12 0h2v2h-2V0zM2 2h2v2H2V2zm8 0h2v2h-2V2zm-6 2h2v2H4V4zm4 0h2v2H8V4zm-2 2h2v2H6V6z" fill="#E3350D"/>
+            </svg>
+          </button>
+
+          <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 5px;">
+            <span style="font-family: 'Press Start 2P', cursive; font-size: 7px; color: #666;"><%= t("layout.language") %>:</span>
+            
+            <div style="display: flex; border: 2px solid black; box-shadow: 2px 2px 0px black; border-radius: 4px; overflow: hidden; height: 35px; width: 100%;">
+              <%# ES Button: Red if active, White if inactive %>
+              <%= link_to url_for(locale: :es), class: "lang-btn", style: "flex: 1; display: flex; align-items: center; justify-content: center; gap: 5px; background: #{I18n.locale == :es ? '#E3350D' : 'white'}; color: #{I18n.locale == :es ? 'white' : 'black'}; text-decoration: none; font-family: 'Press Start 2P', cursive; font-size: 7px; border-right: 1px solid black;" do %>
+                ES
+                <svg width="14" height="10" viewBox="0 0 14 10" shape-rendering="crispEdges">
+                  <rect width="14" height="3" fill="#E3350D"/>
+                  <rect y="3" width="14" height="4" fill="#FFCC00"/>
+                  <rect y="7" width="14" height="3" fill="#E3350D"/>
+                  <rect x="3" y="4" width="2" height="2" fill="#E3350D"/>
+                </svg>
+              <% end %>
+              
+              <%# EN Button: Red if active, White if inactive %>
+              <%= link_to url_for(locale: :en), class: "lang-btn", style: "flex: 1; display: flex; align-items: center; justify-content: center; gap: 5px; background: #{I18n.locale == :en ? '#E3350D' : 'white'}; color: #{I18n.locale == :en ? 'white' : 'black'}; text-decoration: none; font-family: 'Press Start 2P', cursive; font-size: 7px; border-left: 1px solid black;" do %>
+                EN
+                <svg width="14" height="10" viewBox="0 0 14 10" shape-rendering="crispEdges">
+                  <rect width="14" height="10" fill="#00247D"/>
+                  <path d="M0 0l14 10M14 0L0 10" stroke="white" stroke-width="2"/>
+                  <path d="M0 0l14 10M14 0L0 10" stroke="#CF142B" stroke-width="1"/>
+                  <path d="M7 0v10M0 5h14" stroke="white" stroke-width="3"/>
+                  <path d="M7 0v10M0 5h14" stroke="#CF142B" stroke-width="1"/>
+                </svg>
+              <% end %>
+            </div>
+          </div>
+
+          <% if authenticated? && !Current.user.is_admin? && 
+                !controller_name.in?(%w[sessions registrations passwords]) %>
+            <%= link_to t("layout.profile"), profile_path, style: "display: block; background: #30a7d7; color: white; border: 2px solid black; padding: 10px; cursor: pointer;
+            font-family: 'Press Start 2P', cursive; font-size: 7px; border-radius: 4px; width: 100%; text-decoration: none;
+            text-align: center; margin-bottom: 8px; box-sizing: border-box;", class: "btn-interactive" %>
+          <% end %>
+
+          <% if authenticated? %>
+            <div style="border-top: 2px solid #eee; padding-top: 10px;">
+              <%= button_to t("layout.sign_out"), session_path, method: :delete, style: "background: #E3350D; color: white; border: 2px solid black; padding: 10px; cursor: pointer; font-family: 'Press Start 2P', cursive; font-size: 7px; border-radius: 4px; width: 100%;", class: "btn-interactive" %>
+            </div>
+          <% end %>
+        </div>
+
+        <style>
+          .lang-btn:hover {
+            filter: brightness(1.1);
+          }
+          .lang-btn svg {
+            animation: poke-shake 2s infinite ease-in-out;
+          }
+          @keyframes poke-shake {
+            0%, 100% { transform: rotate(0deg); }
+            10%, 30% { transform: rotate(-10deg); }
+            20%, 40% { transform: rotate(10deg); }
+            50% { transform: rotate(0deg); }
+          }
+        </style>
+
+        <button id="gear-button" onclick="toggleSettings()" style="background: rgba(255,255,255,0.9); padding: 6px; border-radius: 50%; border: 3px solid black; display: flex; align-items: center; justify-content: center; width: 52px; height: 52px; box-shadow: 3px 3px 0px black; cursor: pointer; outline: none;">
+          <%= image_tag "gear.png", style: "width: 36px; height: 36px; image-rendering: pixelated;", alt: "Settings" %>
+        </button>
+      </div>
+    <% end %>
+
+    <script>
+      function toggleSettings() {
+        const menu = document.getElementById('settings-menu');
+        const isOpen = menu.style.display === 'flex';
+        
+        if (!isOpen) {
+          menu.style.display = 'flex';
+          sessionStorage.setItem('settingsMenuOpen', 'true');
+        } else {
+          menu.style.display = 'none';
+          sessionStorage.setItem('settingsMenuOpen', 'false');
+        }
+      }
+
+      function applyMenuState() {
+        const menu = document.getElementById('settings-menu');
+        // Si acabamos de cerrar sesión, forzamos el cierre del menú en el almacenamiento
+        <% if flash[:notice] == "logged_out" %>
+          sessionStorage.setItem('settingsMenuOpen', 'false');
+        <% end %>
+
+        if (menu && sessionStorage.getItem('settingsMenuOpen') === 'true') {
+          menu.style.display = 'flex';
+        } else if (menu) {
+          menu.style.display = 'none';
+        }
+      }
+
+      // Restore state on both initial load and Turbo navigations
+      document.addEventListener('DOMContentLoaded', applyMenuState);
+      document.addEventListener('turbo:load', applyMenuState);
+
+      // Close menu when clicking outside
+      document.addEventListener('click', function(event) {
+        const menu = document.getElementById('settings-menu');
+        const gearButton = document.getElementById('gear-button');
+        
+        if (menu && gearButton && menu.style.display === 'flex') {
+          if (!menu.contains(event.target) && !gearButton.contains(event.target)) {
+            menu.style.display = 'none';
+            sessionStorage.setItem('settingsMenuOpen', 'false');
+          }
+        }
+      });
+      </script>
+    <% unless controller.is_a?(Admin::ApplicationController) || 
+              controller_name.in?(%w[sessions registrations passwords api_cards]) %>
+      <%= render "layouts/footer" %>
+    <% end %>
+    <%# --- POP-UP DE COMPRA EXITOSA --- %>
+    <% if flash[:checkout_success] %>
+      <div id="success-popup" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; z-index: 9999;">
+        <div style="background: white; border: 6px solid black; padding: 40px 30px; text-align: center; max-width: 450px; font-family: 'Press Start 2P', cursive; box-shadow: 10px 10px 0px #30a7d7; position: relative;">
+          
+          <h2 style="font-size: 16px; color: #30a7d7; margin-bottom: 25px; line-height: 1.4;">
+            <%= t("checkout.success_title") %>
+          </h2>
+          
+          <p style="font-size: 9px; line-height: 1.8; margin-bottom: 35px; color: #333;">
+            <%= t("checkout.success_body") %>
+          </p>
+          
+          <div style="display: flex; flex-direction: column; gap: 15px;">
+            <%# Botón principal que lleva a mis compras %>
+            <%= link_to t("checkout.go_purchases"), purchases_path, class: "btn-interactive", style: "background: #FFCC00; color: black; border: 3px solid black; padding: 15px; text-decoration: none; font-size: 10px; cursor: pointer;" %>
+            
+            <%# Botón secundario para cerrar el pop-up %>
+            <button onclick="document.getElementById('success-popup').style.display='none'" class="btn-interactive" style="background: #E3350D; color: white; border: 3px solid black; padding: 15px; cursor: pointer; font-size: 10px; font-family: 'Press Start 2P', cursive;">
+              <%= t("checkout.close") %>
+            </button>
+          </div>
+
+        </div>
+      </div>
+    <% end %>
+    <%# --- POP-UP DE PERFIL INCOMPLETO --- %>
+    <% if flash[:show_incomplete_profile_modal] %>
+      <div id="incomplete-profile-popup" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; z-index: 9999;">
+        <div style="background: white; border: 6px solid black; padding: 40px 30px; text-align: center; max-width: 450px; font-family: 'Press Start 2P', cursive; box-shadow: 10px 10px 0px #E3350D; position: relative;">
+          
+          <button onclick="document.getElementById('incomplete-profile-popup').style.display='none'" style="position: absolute; top: 10px; right: 15px; background: none; border: none; font-size: 16px; font-family: 'Press Start 2P', cursive; cursor: pointer; color: #E3350D;" class="btn-interactive">X</button>
+
+          <h2 style="font-size: 16px; color: #E3350D; margin-bottom: 25px; line-height: 1.4;">
+            <%= t("products.notices.incomplete_profile_title", default: "¡ALTO AHÍ, ENTRENADOR!") %>
+          </h2>
+          
+          <p style="font-size: 9px; line-height: 1.8; margin-bottom: 35px; color: #333;">
+            <%= t("products.notices.incomplete_profile") %>
+          </p>
+          
+          <div style="display: flex; justify-content: center;">
+            <%= link_to t("products.notices.go_to_profile", default: "IR A MI PERFIL"), profile_path, class: "btn-interactive", style: "background: #FFCC00; color: black; border: 3px solid black; padding: 15px; text-decoration: none; font-size: 10px; cursor: pointer; display: inline-block;" %>
+          </div>
+
+        </div>
+      </div>
+    <% end %>
+    <%# --- POP-UP DE SESIÓN CERRADA --- %>
+    <% if flash[:show_logout_modal] %>
+      <div id="logout-popup" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; z-index: 9999;">
+        <div style="background: white; border: 6px solid black; padding: 40px 30px; text-align: center; max-width: 450px; font-family: 'Press Start 2P', cursive; box-shadow: 10px 10px 0px #E3350D; position: relative;">
+          
+          <button onclick="document.getElementById('logout-popup').style.display='none'" style="position: absolute; top: 10px; right: 15px; background: none; border: none; font-size: 16px; font-family: 'Press Start 2P', cursive; cursor: pointer; color: #E3350D;" class="btn-interactive">X</button>
+
+          <h2 style="font-size: 14px; color: #E3350D; margin-bottom: 25px; line-height: 1.4;">
+            <%= t("layout.logout_success_title", default: "¡SESIÓN CERRADA!") %>
+          </h2>
+          
+          <p style="font-size: 8px; line-height: 1.8; margin-bottom: 35px; color: #333;">
+            <%= t("layout.logout_success_body", default: "Has cerrado sesión correctamente. ¡Vuelve pronto a tu aventura Pokémon!") %>
+          </p>
+          
+          <div style="display: flex; justify-content: center;">
+            <button onclick="document.getElementById('logout-popup').style.display='none'" class="btn-interactive" style="background: #30a7d7; color: white; border: 3px solid black; padding: 15px 30px; cursor: pointer; font-size: 10px; font-family: 'Press Start 2P', cursive;">
+              <%= t("checkout.close", default: "ACEPTAR") %>
+            </button>
+          </div>
+
+        </div>
+      </div>
+    <% end %>
+  </body>
+</html>

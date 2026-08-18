@@ -1,0 +1,62 @@
+<div class="pokedex-background">
+  <div class="pokedex-frame-large">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+      <%= link_to "← " + t("admin.users.show.back"), admin_dashboard_path, class: "admin-btn-back btn-interactive", style: "margin-bottom: 0;" %>
+      <h2 class="admin-title" style="margin-bottom: 0;"><%= t("support.admin.title") %></h2>
+    </div>
+
+    <% if @support_messages.any? %>
+      <div style="overflow-x: auto;">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th><%= t("support.admin.table.date") %></th>
+              <th><%= t("support.admin.table.name") %></th>
+              <th><%= t("support.admin.table.message") %></th>
+              <th><%= t("support.admin.table.status") %></th>
+              <th><%= t("support.admin.table.actions") %></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @support_messages.each do |msg| %>
+              <tr style="<%= 'opacity: 0.7; background-color: #f9f9f9;' if msg.resolved? %>">
+                <td style="white-space: nowrap;"><%= msg.created_at.strftime("%d/%m/%Y %H:%M") %></td>
+                <td>
+                  <strong><%= msg.name %></strong><br>
+                  <span style="font-size: 7px; color: #666;"><%= msg.email %></span>
+                </td>
+                <td>
+                  <div style="max-width: 300px; max-height: 200px; overflow-y: auto; word-wrap: break-word; line-height: 1.4;">
+                    "<%= msg.message %>"
+                  </div>
+                </td>
+                <td>
+                  <% if msg.resolved? %>
+                    <span class="card-count-badge" style="background: #4CAF50; color: white;"><%= t("support.admin.status.resolved") %></span>
+                  <% else %>
+                    <span class="card-count-badge" style="background: #FFCC00; color: black;"><%= t("support.admin.status.pending") %></span>
+                  <% end %>
+                </td>
+                <td>
+                  <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                    <%= link_to t("support.admin.actions.reply"), "mailto:#{msg.email}?subject=Respuesta a tu consulta en PokéCards", class: "admin-btn-blue btn-interactive", style: "font-size: 6px;" %>
+                    
+                    <%= button_to admin_support_message_path(msg, resolved: !msg.resolved?), method: :patch, class: "admin-btn-yellow btn-interactive", style: "font-size: 6px;" do %>
+                      <%= msg.resolved? ? t("support.admin.actions.reopen") : t("support.admin.actions.resolve") %>
+                    <% end %>
+
+                    <%= button_to "🗑️", admin_support_message_path(msg), method: :delete, data: { turbo_confirm: t("support.admin.actions.delete_confirm") }, class: "admin-btn-red btn-interactive", style: "font-size: 6px; padding: 8px;" %>
+                  </div>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    <% else %>
+      <div style="text-align: center; padding: 40px; background: #fdfdfd; border: 4px dashed #ccc;">
+        <p style="font-family: 'Press Start 2P', cursive; font-size: 10px; color: #999;"><%= t("support.admin.no_messages") %></p>
+      </div>
+    <% end %>
+  </div>
+</div>

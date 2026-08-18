@@ -1,0 +1,30 @@
+en:
+  registrations:
+    title: "New trainer"
+    username_placeholder: "Your username"
+    email_placeholder: "Your email"
+    password_placeholder: "Create a password"
+    password_confirmation_placeholder: "Confirm password"
+    submit: "Sign up"
+    already_have_account: "Already have an account?"
+    sign_in: "Sign in!"
+
+  activerecord:
+    attributes:
+      user:
+        username: "Username"
+        email_address: "Email"
+        password: "Password"
+        password_confirmation: "Password confirmation"
+    errors:
+      messages:
+        blank: "can't be blank"
+        taken: "has already been taken"
+        too_short: "is too short (minimum %{count} characters)"
+        confirmation: "doesn't match %{attribute}"
+        invalid_characters: "can only contain letters and numbers"
+      models:
+        user:
+          attributes:
+            username:
+              invalid_characters: "can only contain letters and numbers"

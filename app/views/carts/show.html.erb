@@ -1,0 +1,61 @@
+<div class="pokedex-background">
+  <div class="pokedex-frame" style="max-width: 800px; width: 90%;">
+    <h1 style="font-family: 'Press Start 2P', cursive; font-size: 20px; text-align: center; margin-bottom: 30px; color: #333;">
+      <%= t("cart.title") %>
+    </h1>
+
+    <% if @cart.cart_items.any? %>
+      <div style="background: white; border: 4px solid black; border-radius: 10px; padding: 20px; box-shadow: 6px 6px 0px rgba(0,0,0,0.1);">
+        <table style="width: 100%; border-collapse: collapse; font-family: 'Press Start 2P', cursive; font-size: 10px;">
+          <thead>
+            <tr style="border-bottom: 4px solid black; text-align: left;">
+              <th style="padding: 10px;"><%= t("cart.card") %></th>
+              <th style="padding: 10px;"><%= t("cart.price") %></th>
+              <th style="padding: 10px; text-align: center;"><%= t("cart.quantity") %></th>
+              <th style="padding: 10px; text-align: right;"><%= t("cart.action") %></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @cart.cart_items.each do |item| %>
+              <tr style="border-bottom: 2px solid #eee;">
+                <td style="padding: 15px; font-weight: bold;"><%= item.listing.card.name %></td>
+                <td style="padding: 15px;">$<%= item.listing.price %></td>
+                <td style="padding: 15px; text-align: center;"><%= item.quantity %></td>
+                <td style="padding: 15px; text-align: right;">
+                  <%= button_to t("cart.drop"), remove_item_cart_path(listing_id: item.listing_id), method: :delete, class: "btn-interactive",
+                      style: "background: #E3350D; color: white; border: 2px solid black; padding: 5px 10px; cursor: pointer; font-family: 'Press Start 2P', cursive; font-size: 8px;" %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+
+        <div style="margin-top: 20px; text-align: right; font-family: 'Press Start 2P', cursive; font-size: 12px; line-height: 2;">
+          <% subtotal = @cart.cart_items.sum { |i| i.listing.price * i.quantity } %>
+          <% service_fee = subtotal * 0.03 %>
+          <% total = subtotal + service_fee %>
+
+          <p><%= t("cart.subtotal") %>: $<%= number_with_precision(subtotal, precision: 2) %></p>
+          <p><%= t("cart.service_fee") %> (3%): $<%= number_with_precision(service_fee, precision: 2) %></p>
+          <h2 style="font-size: 14px; margin-top: 10px; border-top: 2px solid black; display: inline-block; padding-top: 10px;">
+            <%= t("cart.total") %>: $<%= number_with_precision(total, precision: 2) %>
+          </h2>
+        </div>
+      </div>
+    <% else %>
+      <div style="text-align: center; padding: 40px;">
+        <p style="font-family: 'Press Start 2P', cursive; font-size: 12px;"><%= t("cart.empty") %></p>
+      </div>
+    <% end %>
+
+    <div style="text-align: center; margin-top: 30px; display: flex; justify-content: center; gap: 20px;">
+      <%= link_to t("cart.back_to_store"), products_path, class: "btn-interactive",
+          style: "background: #30a7d7; color: white; border: 2px solid black; padding: 10px 20px; text-decoration: none; font-family: 'Press Start 2P', cursive; font-size: 10px; border-radius: 5px;" %>
+
+      <% if @cart.cart_items.any? %>
+        <%= button_to t("cart.pay_all"), checkout_cart_path, method: :post, class: "btn-interactive",
+            style: "background: #4caf50; color: white; border: 2px solid black; padding: 10px 20px; cursor: pointer; font-family: 'Press Start 2P', cursive; font-size: 10px; border-radius: 5px;" %>
+      <% end %>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,121 @@
+<div class="poke-page">
+  <div style="position: fixed; top: 20px; left: 30px; z-index: 1000;">
+    <%= link_to products_path, class: "back-button-retro btn-interactive", style: "
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: white;
+      border: 3px solid black;
+      width: 48px;
+      height: 48px;
+      border-radius: 5px;
+      box-shadow: 4px 4px 0px black;
+      text-decoration: none;
+      transition: all 0.1s;
+      cursor: pointer;
+    " do %>
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">
+        <path d="M15 18l-6-6 6-6" stroke="black" stroke-width="3" stroke-linecap="square"/>
+      </svg>
+    <% end %>
+  </div>
+
+  <div class="pokeball-container" style="max-width: 450px;">
+    <div class="cap top-cap" style="height: 80px;">
+      <div class="cutout" style="width: 80px; height: 40px; bottom: -12px;"></div>
+    </div>
+
+    <div class="screen-content" style="padding: 15px 30px; margin: -12px 0;">
+      <div class="logo-box" style="margin-bottom: 5px;">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/9/98/International_Pok%C3%A9mon_logo.svg" alt="Pokemon" class="main-logo" style="width: 100px; margin-bottom: 5px;">
+        <h2 class="welcome-msg" style="color: #30a7d7; text-shadow: 1px 1px #000; font-size: 12px; margin: 5px 0 10px;"><%= t("support.title") %></h2>
+      </div>
+
+      <div class="help-text" style="font-family: 'Press Start 2P', cursive; font-size: 7px; color: #666; margin-bottom: 12px; text-align: center; line-height: 1.2;">
+        ¿PROBLEMAS CON TUS CARTAS? CONTÁCTANOS.
+      </div>
+
+      <% if flash[:alert] %>
+        <div class="gba-error-box" style="padding: 5px; margin-bottom: 10px;">
+          <div class="gba-error-text" style="font-size: 6px;"><%= flash[:alert] %></div>
+        </div>
+      <% end %>
+
+      <%= form_with url: support_path, class: "condensed-form", local: true do |f| %>
+        <div class="poke-field" style="border: 2px solid #333; margin-bottom: 8px; box-shadow: 3px 3px 0px rgba(0,0,0,0.1); padding: 2px 5px;">
+          <span class="icon" style="background: #eee; border-right: 2px solid #333; padding: 5px; font-size: 10px;">👤</span>
+          <%= f.text_field :name, value: @name, placeholder: t("support.name_placeholder"), class: "p-input", required: true, style: "padding: 5px; font-size: 7px;" %>
+        </div>
+
+        <div class="poke-field" style="border: 2px solid #333; margin-bottom: 8px; box-shadow: 3px 3px 0px rgba(0,0,0,0.1); padding: 2px 5px;">
+          <span class="icon" style="background: #eee; border-right: 2px solid #333; padding: 5px; font-size: 10px;">📧</span>
+          <%= f.email_field :email, value: @email, placeholder: t("support.email_placeholder"), class: "p-input", required: true, style: "padding: 5px; font-size: 7px;" %>
+        </div>
+
+        <div class="poke-field" style="height: auto; border: 2px solid #333; margin-bottom: 12px; box-shadow: 3px 3px 0px rgba(0,0,0,0.1); padding: 2px 5px;">
+          <span class="icon" style="background: #eee; border-right: 2px solid #333; padding: 8px; display: flex; align-items: flex-start; justify-content: center; font-size: 10px;">💬</span>
+          <%= f.text_area :message, placeholder: t("support.message_placeholder"), class: "p-input", style: "height: 60px; resize: none; padding: 8px; font-size: 7px; background: #fdfdfd; line-height: 1.4;", maxlength: 2000, required: true %>
+          </div>
+
+        <div class="btn-container" style="margin-top: 5px;">
+          <%= f.submit t("support.submit"), class: "p-submit btn-interactive", style: "background: #FFCC00; color: #333; border: 3px solid #333; box-shadow: 3px 3px 0px #333; font-size: 8px; padding: 10px; width: 100%; cursor: pointer;" %>
+        </div>
+      <% end %>
+
+      <div class="poke-footer" style="margin-top: 15px;">
+      </div>
+    </div>
+
+    <div class="cap bottom-cap" style="height: 80px;">
+      <div class="cutout" style="width: 80px; height: 40px; top: -12px;"></div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .poke-field:focus-within {
+    border-color: #30a7d7 !important;
+    transform: translateY(-2px);
+    transition: all 0.2s;
+  }
+  .p-submit:hover {
+    background: #FFD700 !important;
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0px #333 !important;
+  }
+  .p-submit:active {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0px #333 !important;
+  }
+</style>
+
+
+<style>
+  .gba-error-box {
+    background: #fff0f0;
+    border: 3px solid #E3350D;
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 4px 4px 0px rgba(0,0,0,0.1);
+    animation: shake 0.5s ease-in-out;
+  }
+  .gba-error-icon {
+    font-size: 16px;
+  }
+  .gba-error-text {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 7px;
+    color: #E3350D;
+    line-height: 1.4;
+    text-transform: uppercase;
+  }
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+  }
+</style>

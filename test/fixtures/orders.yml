@@ -1,0 +1,17 @@
+one:
+  client: one
+  seller: two
+  status: pending_approval
+  subtotal: 100.0
+  service_fee: 5.0
+  total_price: 105.0
+  buyer_notification_seen: false
+
+two:
+  client: two
+  seller: one
+  status: accepted
+  subtotal: 50.0
+  service_fee: 2.5
+  total_price: 52.5
+  buyer_notification_seen: true

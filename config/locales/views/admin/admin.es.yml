@@ -1,0 +1,68 @@
+es:
+  admin:
+    financials:
+      title: "LIBRO CONTABLE 💵"
+      mailbox_btn: "CORREO SOPORTE 📩"
+      ledger_btn: "LIBRO CONTABLE 💵"
+      kpis:
+        total_earnings: "GANANCIAS APP"
+        escrow_vault: "BÓVEDA ESCROW"
+        star_seller: "VENDEDOR ESTRELLA"
+        golden_day: "DÍA DE ORO"
+        market_volume: "FLUJO TOTAL"
+      table:
+        id: "ID"
+        date: "FECHA"
+        trainers: "TRAINERS (C ➡️ V)"
+        subtotal: "SUBTOTAL"
+        fee: "FEE (3%)"
+        total: "TOTAL"
+        status: "ESTADO"
+    dashboard:
+      title: "Panel de Control: Entrenadores"
+      table:
+        id: "ID"
+        username: "Nombre de Usuario"
+        email: "Email"
+        cards: "Cartas"
+        status: "Estado"
+        actions: "Acciones"
+      status:
+        online: "EN LÍNEA"
+        offline: "DESCONECTADO"
+        banned: "BANEADO"
+      actions:
+        ban: "Banear"
+        unban: "Desbanear"
+        delete: "Eliminar"
+        confirm_delete: "¿Estás seguro de eliminar a este entrenador?"
+      flash:
+        banned: "Usuario baneado"
+        unbanned: "Baneo levantado correctamente."
+        destroyed: "Cuenta de entrenador eliminada para siempre."
+    reviews:
+      destroyed: "Reseña eliminada correctamente por el administrador."
+    users:
+      show:
+        back: "Volver al Panel General"
+        header: "Perfil del Entrenador"
+        stats:
+          registered: "Registro"
+          status: "Estado"
+          sales: "Ventas Totales"
+        catalog:
+          title: "Catálogo de Cartas"
+          stock: "Stock"
+          delete_listing: "Eliminar"
+          no_listings: "Este entrenador no tiene cartas publicadas."
+          confirm_delete: "¿Estás seguro de que quieres eliminar esta cantidad?"
+        flash:
+          listing_deleted: "Publicación eliminada correctamente."
+          stock_reduced: "Se han eliminado %{count} unidades de la publicación."
+        reviews:
+          title: "Reseñas"
+          count: "Total"
+          delete_btn: "ELIMINAR"
+          confirm_delete: "¿Estás seguro de que quieres eliminar esta reseña?"
+          none: "Ninguna"
+          avg: "Prom"

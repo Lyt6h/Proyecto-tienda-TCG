@@ -1,0 +1,5 @@
+<div style="text-align: center; margin-top: 50px; font-family: sans-serif;">
+  <h1><%= t("welcome.title") %> <%= Current.user.email_address %></h1>
+
+  <%= button_to t("welcome.sign_out"), session_path, method: :delete, style: "padding: 15px 30px; background-color: #E3350D; color: white; border: 4px solid #222224; cursor: pointer; font-family: 'Press Start 2P', cursive; margin: 0 auto;" %>
+</div>

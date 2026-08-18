@@ -1,0 +1,109 @@
+<div class="poke-page">
+  <div style="position: fixed; top: 20px; left: 30px; z-index: 1000;">
+    <%= link_to products_path, class: "back-button-retro btn-interactive", style: "
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: white;
+      border: 3px solid black;
+      width: 48px;
+      height: 48px;
+      border-radius: 5px;
+      box-shadow: 4px 4px 0px black;
+      text-decoration: none;
+      transition: all 0.1s;
+      cursor: pointer;
+    " do %>
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">
+        <path d="M15 18l-6-6 6-6" stroke="black" stroke-width="3" stroke-linecap="square"/>
+      </svg>
+    <% end %>
+  </div>
+
+  <div class="pokeball-container">
+    <div class="cap top-cap">
+      <div class="cutout"></div>
+    </div>
+
+    <div class="screen-content">
+      <div class="logo-box">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/9/98/International_Pok%C3%A9mon_logo.svg" alt="Pokemon" class="main-logo">
+        <h2 class="welcome-msg"><%= t("login.title") %></h2>
+      </div>
+
+      <% if flash[:alert] %>
+        <div class="gba-error-box">
+          <div class="gba-error-icon">⚠️</div>
+          <div class="gba-error-text"><%= flash[:alert] %></div>
+        </div>
+      <% end %>
+
+      <%= form_with url: session_path, class: "condensed-form", html: { autocomplete: "off" } do |f| %>
+        <div class="poke-field">
+          <span class="icon">👤</span>
+          <%= f.text_field :login, value: params[:login], placeholder: t("login.email_placeholder"), class: "p-input", required: true, autocomplete: "off" %>
+        </div>
+
+        <div class="poke-field">
+          <span class="icon">🔒</span>
+          <div style="position: relative; width: 100%; display: flex; align-items: center;">
+            <%= f.password_field :password, placeholder: t("login.password_placeholder"), class: "p-input", id: "password-input", style: "width: 100%;", required: true, autocomplete: "off" %>
+
+            <button type="button" id="toggle-password-btn" style="position: absolute; right: 10px; background: none; border: none; cursor: pointer; color: #ccc; z-index: 10;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/>
+                <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="btn-container">
+          <%= f.submit t("login.submit"), class: "p-submit" %>
+          <div class="btn-dot"></div>
+        </div>
+      <% end %>
+
+      <div class="poke-footer">
+        <%= link_to t("login.forgot_password"), new_password_path, class: "p-link" %>
+        <div class="register-line">
+          <%= t("login.no_account") %> <%= link_to t("login.register"), new_registration_path, class: "p-link bold" %>
+        </div>
+      </div>
+    </div>
+
+    <div class="cap bottom-cap">
+      <div class="cutout"></div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .gba-error-box {
+    background: #fff0f0;
+    border: 3px solid #E3350D;
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 4px 4px 0px rgba(0,0,0,0.1);
+    animation: shake 0.5s ease-in-out;
+  }
+  .gba-error-icon {
+    font-size: 16px;
+  }
+  .gba-error-text {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 7px;
+    color: #E3350D;
+    line-height: 1.4;
+    text-transform: uppercase;
+  }
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+  }
+</style>

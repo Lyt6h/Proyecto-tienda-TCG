@@ -1,0 +1,33 @@
+en:
+  support:
+    title: "SUPPORT"
+    name_placeholder: "Your Name"
+    email_placeholder: "Your Email Address"
+    message_placeholder: "How can we help you?"
+    submit: "SEND MESSAGE"
+    back: "BACK TO HOME"
+    notices:
+      success: "Message sent successfully. We will contact you soon."
+      error: "Please fill in all fields."
+    admin:
+      mailbox_btn: "📥 SUPPORT MAILBOX"
+      title: "SUPPORT MAILBOX"
+      no_messages: "NO SUPPORT MESSAGES FOUND"
+      table:
+        date: "DATE"
+        name: "NAME"
+        message: "MESSAGE"
+        status: "STATUS"
+        actions: "ACTIONS"
+      status:
+        resolved: "RESOLVED"
+        pending: "PENDING"
+      actions:
+        reply: "📧 REPLY"
+        resolve: "✅ RESOLVE"
+        reopen: "🔄 REOPEN"
+        delete_confirm: "Delete this message permanently?"
+      notices:
+        updated: "Message updated."
+        update_error: "Could not update the message."
+        deleted: "Message deleted."

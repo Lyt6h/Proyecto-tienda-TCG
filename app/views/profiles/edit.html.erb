@@ -1,0 +1,101 @@
+<% content_for :head do %>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.css" integrity="sha512-UtL199D64G0Baqg2nC0qY82K72y/3YfW/V7S8X4n/XG9y8G4W0xO+S7W7XU6uR6C0/6D6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<% end %>
+
+<div class="pokedex-background">
+  <div class="firered-summary-container" style="max-width: 600px;">
+    <div class="firered-header">
+      <div style="color: var(--fr-border-dark); font-size: 12px;">
+        <%= t("profiles.edit_title") %>
+      </div>
+    </div>
+
+    <%= form_with model: @user, url: profile_path, method: :patch, data: { controller: "profile-crop", action: "submit->profile-crop#submit", "profile-crop-target": "form" } do |f| %>
+      
+      <div class="firered-stats-list">
+        
+        <!-- FOTO DE PERFIL CON CROPPER -->
+        <div style="margin-bottom: 20px;">
+          <label style="font-size: 8px; color: var(--fr-hp-red); display: block; margin-bottom: 10px;">
+            <%= t("profiles.photo_label") %> (DRAG & DROP)
+          </label>
+          
+          <div class="drop-zone" 
+               data-profile-crop-target="dropzone"
+               data-action="dragover->profile-crop#dragOver dragleave->profile-crop#dragLeave drop->profile-crop#drop click->profile-crop-target.input.click">
+            <span style="font-size: 30px;">📸</span>
+            <div class="drop-zone-text">ARRASTRA AQUÍ O HAZ CLICK</div>
+            <%= f.file_field :profile_picture, 
+                             class: "hidden", 
+                             style: "display: none;", 
+                             data: { "profile-crop-target": "input", action: "change->profile-crop#selectFile" } %>
+          </div>
+
+          <div data-profile-crop-target="preview" style="display: none;" class="crop-modal-overlay">
+            <div class="crop-container-inner">
+              <div class="cropper-preview-container">
+                <img data-profile-crop-target="image" style="max-width: 100%;">
+              </div>
+              
+              <div class="zoom-controls">
+                <button type="button" class="zoom-btn" data-action="click->profile-crop#zoomOut">−</button>
+                <button type="button" class="zoom-btn" data-action="click->profile-crop#zoomIn">+</button>
+              </div>
+
+              <div style="display: flex; gap: 10px; margin-top: 10px;">
+                <button type="button" data-action="click->profile-crop#cancel" style="flex: 1; padding: 12px; background: #E3350D; color: white; border: 2px solid black; border-radius: 4px; font-family: 'Press Start 2P', cursive; font-size: 8px; cursor: pointer; box-shadow: 2px 2px 0px black;">✕</button>
+                <button type="button" data-action="click->profile-crop#confirm" style="flex: 1; padding: 12px; background: #51ff90; color: black; border: 2px solid black; border-radius: 4px; font-family: 'Press Start 2P', cursive; font-size: 8px; cursor: pointer; box-shadow: 2px 2px 0px black;">✓</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- DATOS PERSONALES -->
+        <div class="firered-stat-row">
+          <div class="firered-stat-label bg-def"><%= t("profiles.full_name") %></div>
+          <%= f.text_field :full_name, class: "p-input", style: "height: 100%;", placeholder: t("profiles.full_name_placeholder") %>
+        </div>
+
+        <div class="firered-stat-row">
+          <div class="firered-stat-label bg-hp">EMAIL</div>
+          <div class="firered-stat-value" style="color: #999;"><%= @user.email_address %></div>
+        </div>
+
+        <div class="firered-stat-row">
+          <div class="firered-stat-label bg-atk">PHONE</div>
+          <%= f.telephone_field :phone_number, class: "p-input", style: "height: 100%;", placeholder: t("profiles.phone_placeholder") %>
+        </div>
+
+        <div class="firered-stat-row">
+          <div class="firered-stat-label bg-spatk">DISTRICT</div>
+          <%= f.text_field :district, class: "p-input", style: "height: 100%;", placeholder: t("profiles.district_placeholder") %>
+        </div>
+
+        <div class="firered-stat-row">
+          <div class="firered-stat-label bg-spdef">CITY</div>
+          <%= f.text_field :city, class: "p-input", style: "height: 100%;", placeholder: t("profiles.city_placeholder") %>
+        </div>
+
+        <div class="firered-stat-row">
+          <div class="firered-stat-label bg-speed">STREET</div>
+          <%= f.text_field :street, class: "p-input", style: "height: 100%;", placeholder: t("profiles.street_placeholder") %>
+        </div>
+
+        <div class="firered-stat-row">
+          <div class="firered-stat-label bg-speed">NUMBER</div>
+          <%= f.text_field :number, class: "p-input", style: "height: 100%;", placeholder: t("profiles.number_placeholder") %>
+        </div>
+      </div>
+
+      <div style="margin-top: 25px; display: flex; gap: 15px;">
+        <%= f.submit t("profiles.save_button"), style: "background: var(--fr-hp-red); color: white; border: 3px solid black; padding: 12px; text-align: center; font-size: 9px; box-shadow: 4px 4px 0px black; border-radius: 5px; cursor: pointer; flex: 1; font-family: 'Press Start 2P', cursive;" %>
+        
+        <%= link_to profile_path, style: "text-decoration: none; flex: 1;" do %>
+          <div style="background: #888; color: white; border: 3px solid black; padding: 12px; text-align: center; font-size: 9px; box-shadow: 4px 4px 0px black; border-radius: 5px;">
+            <%= t("profiles.cancel_button") %>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</div>

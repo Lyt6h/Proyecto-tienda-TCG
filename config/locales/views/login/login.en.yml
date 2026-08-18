@@ -1,0 +1,9 @@
+en:
+  login:
+    title: "Welcome, Trainer!"
+    email_placeholder: "Username or email"
+    password_placeholder: "Password"
+    submit: "Sign in"
+    forgot_password: "Forgot your password?"
+    no_account: "Don't have an account?"
+    register: "Sign up!"

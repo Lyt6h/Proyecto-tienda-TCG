@@ -1,0 +1,15 @@
+one:
+  card: one
+  seller: one
+  price: 1000
+  stock: 10
+  condition: near_mint
+  status: active
+
+two:
+  card: one
+  seller: two
+  price: 2000
+  stock: 5
+  condition: mint
+  status: active

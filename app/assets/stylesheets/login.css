@@ -1,0 +1,201 @@
+:root {
+  --p-red: #E3350D;
+  --p-red-dark: #b02a0a;
+  --p-white: #FFFFFF;
+  --p-black: #222224;
+  --p-blue: #30a7d7;
+  --p-border: 8px solid #222224;
+}
+
+.poke-page {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  font-family: 'Press Start 2P', cursive;
+  background-image: url("puebloPaleta.webp"); 
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.poke-page::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.15); 
+  backdrop-filter: blur(4px); 
+  -webkit-backdrop-filter: blur(4px);
+  z-index: -1;
+}
+
+.pokeball-container {
+  width: 550px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  filter: drop-shadow(10px 10px 0px rgba(0,0,0,0.1));
+}
+
+.cap {
+  width: 100%;
+  height: 120px; 
+  border: var(--p-border);
+  position: relative;
+  box-sizing: border-box;
+  z-index: 2;
+}
+
+.top-cap {
+  background: var(--p-red);
+  border-radius: 275px 275px 0 0;
+  border-bottom: 12px solid var(--p-black);
+  box-shadow: inset -15px 10px 0 rgba(255,255,255,0.2);
+}
+
+.bottom-cap {
+  background: var(--p-white);
+  border-radius: 0 0 275px 275px;
+  border-top: 12px solid var(--p-black);
+  box-shadow: inset -15px -10px 0 rgba(0,0,0,0.05);
+}
+
+/* El hueco para el botón */
+.cutout {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90px;
+  height: 45px;
+  background: white;
+  border: var(--p-border);
+}
+
+.top-cap .cutout { bottom: -12px; border-radius: 50px 50px 0 0; border-bottom: none; }
+.bottom-cap .cutout { top: -12px; border-radius: 0 0 50px 50px; border-top: none; }
+
+.screen-content {
+  background: white;
+  width: 90%;
+  border-left: var(--p-border);
+  border-right: var(--p-border);
+  margin: -12px 0;
+  padding: 15px 40px;
+  box-sizing: border-box;
+  text-align: center;
+  z-index: 1;
+}
+
+.main-logo {
+  width: 150px;
+  margin-bottom: 8px;
+}
+
+.welcome-msg {
+  font-size: 9px;
+  margin: 8px 0 15px;
+  color: #333;
+}
+
+.poke-field {
+  display: flex;
+  align-items: center;
+  border: 4px solid #a4a4a4;
+  border-radius: 4px;
+  margin-bottom: 10px;
+  padding: 4px 10px;
+  background: #fdfdfd;
+}
+
+.p-input {
+  border: none;
+  background: transparent;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 7px;
+  padding: 10px;
+  width: 100%;
+  outline: none;
+}
+
+.btn-container {
+  position: relative;
+  margin-top: 12px;
+}
+
+.p-submit {
+  width: 100%;
+  background: var(--p-red);
+  color: white;
+  border: var(--p-border);
+  padding: 14px;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.btn-dot {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px;
+  height: 18px;
+  background: rgba(255,255,255,0.3);
+  border: 3px solid var(--p-black);
+  border-radius: 50%;
+}
+
+.poke-footer {
+  margin-top: 12px;
+  font-size: 6px;
+  line-height: 1.7;
+}
+
+.p-link {
+  color: #213C66;
+  text-decoration: none;
+}
+
+.bold { font-weight: bold; }
+
+.password-wrapper { 
+  position: relative;
+  width: 100%;
+}
+
+.toggle-password {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  z-index: 2;
+  opacity: 0.5; 
+  transition: opacity 0.2s;
+}
+
+.toggle-password:hover {
+  opacity: 1;
+}
+
+.toggle-password svg {
+  width: 20px;
+  height: 20px;
+  fill: #fff; 
+}
+
+.toggle-password.active svg {
+  fill: #E3350D; 
+}

@@ -1,0 +1,156 @@
+<%# app/views/admin/users/show.html.erb %>
+
+<div class="pokedex-background">
+  <div class="pokedex-frame-large">
+    <%= link_to "← " + t("admin.users.show.back"), admin_dashboard_path, class: "admin-btn-back btn-interactive" %>
+
+    <div class="trainer-detail-header" style="display: flex; align-items: center; gap: 20px; flex-wrap: wrap;">
+      <div style="width: 80px; height: 80px; background: white; border: 3px solid black; border-radius: 50%; overflow: hidden; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+        <% if @user.profile_picture.attached? %>
+          <%= image_tag @user.profile_picture, style: "width: 100%; height: 100%; object-fit: cover; image-rendering: pixelated;" %>
+        <% else %>
+          <%= image_tag "default_trainer.png", style: "width: 100%; image-rendering: pixelated; margin-top: 5px;" %>
+        <% end %>
+      </div>
+      <div class="trainer-info" style="flex: 1; min-width: 200px;">
+        <p>ID: #<%= @user.id %></p>
+        <h2><%= @user.username %></h2>
+        <p><%= @user.email_address %></p>
+      </div>
+      <div class="trainer-badges">
+        <% if @user.is_admin? %>
+          <span class="card-count-badge" style="background: #30a7d7; color: white;">ADMIN</span>
+        <% end %>
+        <% if @user.banned? %>
+          <span class="card-count-badge" style="background: #E3350D; color: white;">BANNED</span>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <h3><%= t("admin.users.show.stats.registered") %></h3>
+        <p><%= l @user.created_at.to_date, format: :long %></p>
+      </div>
+      <div class="stat-card">
+        <h3><%= t("admin.users.show.stats.status") %></h3>
+        <div class="status-indicator" style="justify-content: center;">
+          <span class="status-light <%= @user.online? ? 'online' : 'offline' %>"></span>
+          <%= @user.online? ? t("admin.dashboard.status.online") : t("admin.dashboard.status.offline") %>
+        </div>
+      </div>
+      <div class="stat-card">
+        <h3><%= t("admin.users.show.stats.sales") %></h3>
+        <p><%= @total_sales %></p>
+      </div>
+    </div>
+
+    <div class="admin-personal-info" style="margin-top: 20px; margin-bottom: 20px; background: rgba(255,255,255,0.8); border: 4px solid black; padding: 20px; border-radius: 10px; font-family: 'Press Start 2P', cursive; font-size: 8px; line-height: 1.6;">
+      <h3 style="font-size: 10px; margin-bottom: 15px; border-bottom: 2px dashed black; padding-bottom: 10px;"><%= t("profiles.address_title", default: "Información Personal") %></h3>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+        <div>
+          <strong><%= t("profiles.full_name", default: "Nombre Completo") %>:</strong><br>
+          <span style="color: #333;"><%= @user.full_name.presence || "-" %></span>
+        </div>
+        <div>
+          <strong><%= t("profiles.phone", default: "Teléfono") %>:</strong><br>
+          <span style="color: #333;"><%= @user.phone_number.presence || "-" %></span>
+        </div>
+        <div style="grid-column: span 2;">
+          <strong><%= t("profiles.address_title", default: "Dirección") %>:</strong><br>
+          <span style="color: #333;">
+            <%= [@user.street, @user.number, @user.apartment, @user.district, @user.city].reject(&:blank?).join(", ").presence || "-" %>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="catalog-section">
+      <h3 class="catalog-title"><%= t("admin.users.show.catalog.title") %></h3>
+
+      <% if @user.listings.any? %>
+        <div class="pokemon-card-grid">
+          <% @user.listings.each do |listing| %>
+            <div class="retro-card-item">
+              <% if listing.stock <= 0 %>
+                <div class="out-of-stock-overlay">
+                  <div class="diagonal-line"></div>
+                  <div class="out-of-stock-badge"><%= t("products.out_of_stock_label") %></div>
+                </div>
+              <% end %>
+
+              <% if listing.card.image_url.present? %>
+                <%= image_tag listing.card.image_url, class: "card-image", alt: listing.card.name %>
+              <% else %>
+                <div class="card-image" style="display: flex; align-items: center; justify-content: center; font-size: 8px;">NO IMAGE</div>
+              <% end %>
+              
+              <div class="card-details">
+                <h4><%= listing.card.name %></h4>
+                <div class="card-meta">
+                  <span class="card-price">$<%= listing.price %></span>
+                  <span style="color: #666;"><%= t("admin.users.show.catalog.stock") %>: <%= listing.stock %></span>
+                </div>
+                
+                <%= form_with url: admin_listing_path(listing), method: :delete, local: true, 
+                              data: { turbo_confirm: t("admin.users.show.catalog.confirm_delete") } do |f| %>
+                  <div style="display: flex; gap: 5px; align-items: center; margin-top: 10px;">
+                    <%= f.number_field :quantity, value: 1, min: 1, max: listing.stock, 
+                                      style: "width: 45px; font-family: 'Press Start 2P'; font-size: 6px; border: 2px solid black; padding: 4px; background: white;" %>
+                    <%= f.submit t("admin.users.show.catalog.delete_listing"), 
+                                class: "admin-btn-red btn-interactive", style: "flex: 1; font-size: 6px; padding: 6px;" %>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <p style="font-size: 8px; color: #666; text-align: center; padding: 20px;">
+          <%= t("admin.users.show.catalog.no_listings") %>
+        </p>
+      <% end %>
+    </div>
+
+    <div class="catalog-section" style="margin-top: 40px;">
+      <h3 class="catalog-title"><%= t("purchases.reviews_title", default: "Reseñas del Vendedor") %></h3>
+
+      <% if @seller_reviews.any? %>
+        <div style="display: flex; flex-direction: column; gap: 15px;">
+          <% @seller_reviews.each do |rev| %>
+            <% reviewer = rev.order_item.order.client %>
+            <div style="background: #f8f8f8; border: <%= rev.reported? ? '4px solid #E3350D' : '3px solid black' %>; padding: 15px; box-shadow: 4px 4px 0px black; font-family: 'Press Start 2P', cursive; font-size: 8px; position: relative;">
+              <% if rev.reported? %>
+                <div style="position: absolute; top: -10px; right: -10px; background: #E3350D; color: white; padding: 5px 8px; border: 2px solid black; font-size: 6px; box-shadow: 2px 2px 0px black; z-index: 10;">
+                  🚩 <%= t("reviews.reported_status") %>
+                </div>
+              <% end %>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 2px solid #ddd; padding-bottom: 8px;">
+                <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                  <span style="color: #30a7d7;"><%= reviewer.username %></span>
+                  <span style="font-size: 6px; color: #666;"><%= rev.created_at.strftime("%d/%m/%Y") %></span>
+                  <span style="font-size: 8px; color: #E3350D; background: #eee; padding: 2px 5px; border: 1px solid black; border-radius: 3px;">
+                    Carta: <%= rev.order_item.listing.card.name %> (<%= rev.order_item.listing.card.expansion %>)
+                  </span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 15px;">
+                  <span style="color: #FFCC00; background: #333; padding: 4px 8px; border-radius: 4px;">
+                    <%= "★" * rev.seller_rating %><%= "☆" * (5 - rev.seller_rating) %>
+                  </span>
+                  <%= button_to t("admin.dashboard.actions.delete"), admin_review_path(rev), method: :delete,
+                                form: { data: { turbo_confirm: t("admin.dashboard.actions.confirm_delete") } },
+                                class: "admin-btn-red btn-interactive", style: "font-size: 6px; padding: 4px 8px;" %>
+                </div>
+              </div>
+              <div style="line-height: 1.5; color: #333;">"<%= rev.comment %>"</div>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <p style="font-size: 8px; color: #666; text-align: center; padding: 20px;">
+          <%= t("purchases.no_reviews", default: "Este usuario aún no tiene reseñas.") %>
+        </p>
+      <% end %>
+    </div>
+  </div>
+</div>

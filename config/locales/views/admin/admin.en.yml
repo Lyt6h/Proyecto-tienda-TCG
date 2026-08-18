@@ -1,0 +1,68 @@
+en:
+  admin:
+    financials:
+      title: "FINANCIAL LEDGER 💵"
+      mailbox_btn: "SUPPORT MAILBOX 📩"
+      ledger_btn: "FINANCIAL LEDGER 💵"
+      kpis:
+        total_earnings: "APP EARNINGS"
+        escrow_vault: "ESCROW VAULT"
+        star_seller: "STAR SELLER"
+        golden_day: "GOLDEN DAY"
+        market_volume: "TOTAL VOLUME"
+      table:
+        id: "ID"
+        date: "DATE"
+        trainers: "TRAINERS (B ➡️ S)"
+        subtotal: "SUBTOTAL"
+        fee: "FEE (3%)"
+        total: "TOTAL"
+        status: "STATUS"
+    dashboard:
+      title: "Control Panel: Trainers"
+      table:
+        id: "ID"
+        username: "Username"
+        email: "Email"
+        cards: "Cards"
+        status: "Status"
+        actions: "Actions"
+      status:
+        online: "ONLINE"
+        offline: "OFFLINE"
+        banned: "BANNED"
+      actions:
+        ban: "Ban"
+        unban: "Unban"
+        delete: "Delete"
+        confirm_delete: "Are you sure you want to delete this trainer?"
+      flash:
+        banned: "User banned"
+        unbanned: "Ban lifted successfully."
+        destroyed: "Trainer account deleted forever."
+    reviews:
+      destroyed: "Review successfully deleted by administrator."
+    users:
+      show:
+        back: "Back to Dashboard"
+        header: "Trainer Profile"
+        stats:
+          registered: "Joined"
+          status: "Status"
+          sales: "Total Sales"
+        catalog:
+          title: "Card Catalog"
+          stock: "Stock"
+          delete_listing: "Delete"
+          no_listings: "This trainer has no published cards."
+          confirm_delete: "Are you sure you want to delete this quantity?"
+        flash:
+          listing_deleted: "Listing deleted successfully."
+          stock_reduced: "%{count} units have been removed from the listing."
+        reviews:
+          title: "Reviews"
+          count: "Count"
+          delete_btn: "DELETE"
+          confirm_delete: "Are you sure you want to delete this review?"
+          none: "None"
+          avg: "Avg"

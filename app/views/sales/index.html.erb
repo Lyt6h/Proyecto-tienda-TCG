@@ -1,0 +1,209 @@
+<style>
+  .sales-title {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 16px;
+    text-align: center;
+    margin-top: 50px;
+    margin-bottom: 20px;
+  }
+  .sales-section-title {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 12px;
+    margin-bottom: 15px;
+  }
+  .order-card {
+    border: 4px solid #000;
+    padding: 15px;
+    border-radius: 10px;
+    background: white;
+    box-shadow: 4px 4px 0px black;
+    margin-bottom: 20px;
+  }
+  .order-card.history {
+    background: #f9f9f9;
+    opacity: 0.9;
+  }
+  .order-header {
+    border-bottom: 2px dashed #ccc;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .order-id {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 10px;
+  }
+  .order-date {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 8px;
+    color: #777;
+  }
+  .item-row {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 10px;
+  }
+  .item-image {
+    width: 50px;
+    border: 2px solid black;
+    border-radius: 5px;
+  }
+  .item-name {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 10px;
+    margin: 0;
+  }
+  .item-details {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 8px;
+    margin: 5px 0 0 0;
+    color: #555;
+  }
+  .order-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 2px dashed #ccc;
+  }
+  .order-total {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 12px;
+    color: #E3350D;
+  }
+  .btn-accept {
+    background: #4CAF50;
+    color: white;
+    border: 2px solid black;
+    padding: 8px 12px;
+    cursor: pointer;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 8px;
+    border-radius: 5px;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .btn-reject {
+    background: #E3350D;
+    color: white;
+    border: 2px solid black;
+    padding: 8px 12px;
+    cursor: pointer;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 8px;
+    border-radius: 5px;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .status-badge {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 10px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    border: 2px solid black;
+  }
+  .status-accepted { background: #4CAF50; color: white; }
+  .status-rejected { background: #E3350D; color: white; }
+  .status-other { background: #30a7d7; color: white; }
+  
+  .empty-message {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 10px;
+    text-align: center;
+    background: rgba(255,255,255,0.8);
+    padding: 20px;
+    border-radius: 10px;
+  }
+</style>
+
+<div class="pokedex-background">
+  <div class="pokedex-frame">
+    <h1 class="sales-title"><%= t("sales.title") %></h1>
+
+    <!-- Ventas Pendientes -->
+    <h2 class="sales-section-title"><%= t("sales.pending_title") %></h2>
+    <div style="display: flex; flex-direction: column; margin-bottom: 40px;">
+      <% if @pending_sales.any? %>
+        <% @pending_sales.each do |order| %>
+          <div class="order-card">
+            <div class="order-header">
+              <span class="order-id"><%= t("sales.order") %> #<%= order.id %> - <%= order.client.username %></span>
+              <span class="order-date"><%= order.created_at.strftime("%d/%m/%Y %H:%M") %></span>
+            </div>
+
+            <% order.order_items.each do |item| %>
+              <div class="item-row">
+                <% if item.listing.card.image_url.present? %>
+                  <img src="<%= item.listing.card.image_url %>" alt="<%= item.listing.card.name %>" class="item-image">
+                <% end %>
+                <div style="flex-grow: 1;">
+                  <h3 class="item-name"><%= item.listing.card.name %></h3>
+                  <p class="item-details"><%= t("sales.quantity") %>: <%= item.quantity %> x $<%= item.unit_price %></p>
+                </div>
+              </div>
+            <% end %>
+
+            <div class="order-footer">
+              <strong class="order-total"><%= t("sales.total") %>: $<%= order.total_price %></strong>
+              <div style="display: flex; gap: 10px;">
+                <%= button_to accept_sale_path(id: order.id), method: :patch, class: "btn-accept btn-interactive" do %>
+                  [ <%= t("sales.accept") %> ]
+                <% end %>
+                <%= button_to reject_sale_path(id: order.id), method: :patch, class: "btn-reject btn-interactive" do %>
+                  [ <%= t("sales.reject") %> ]
+                <% end %>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      <% else %>
+        <p class="empty-message"><%= t("sales.no_pending") %></p>
+      <% end %>
+    </div>
+
+    <!-- Historial de Ventas -->
+    <h2 class="sales-section-title"><%= t("sales.history_title") %></h2>
+    <div style="display: flex; flex-direction: column;">
+      <% if @completed_sales.any? %>
+        <% @completed_sales.each do |order| %>
+          <div class="order-card history">
+            <div class="order-header">
+              <span class="order-id"><%= t("sales.order") %> #<%= order.id %> - <%= order.client.username %></span>
+              <span class="status-badge <%= order.status == 'accepted' ? 'status-accepted' : (order.status == 'rejected' ? 'status-rejected' : 'status-other') %>">
+                <%= order.status.upcase %>
+              </span>
+            </div>
+
+            <% order.order_items.each do |item| %>
+              <div class="item-row">
+                <% if item.listing.card.image_url.present? %>
+                  <img src="<%= item.listing.card.image_url %>" alt="<%= item.listing.card.name %>" class="item-image" style="opacity: 0.7;">
+                <% end %>
+                <div style="flex-grow: 1;">
+                  <h3 class="item-name"><%= item.listing.card.name %></h3>
+                  <p class="item-details"><%= t("sales.quantity") %>: <%= item.quantity %> x $<%= item.unit_price %></p>
+                </div>
+              </div>
+            <% end %>
+
+            <div class="order-footer">
+              <span class="order-date"><%= order.created_at.strftime("%d/%m/%Y %H:%M") %></span>
+              <strong class="order-total">$<%= order.total_price %></strong>
+            </div>
+          </div>
+        <% end %>
+      <% else %>
+        <p class="empty-message"><%= t("sales.no_history") %></p>
+      <% end %>
+    </div>
+
+    <!-- Botón Volver -->
+    <div style="text-align: center; margin-top: 30px;">
+      <%= link_to t("sales.back"), products_path, class: "btn-interactive", style: "background: #333; color: white; padding: 12px; border: 2px solid black; text-decoration: none; font-family: 'Press Start 2P', cursive; font-size: 10px; border-radius: 5px; display: inline-block;" %>
+    </div>
+  </div>
+</div>

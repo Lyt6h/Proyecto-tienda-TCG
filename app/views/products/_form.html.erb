@@ -1,0 +1,168 @@
+<div class="pueblo-paleta-bg" style="background-image: url('<%= asset_path('puebloPaleta.webp') %>'); background-size: cover; background-position: center; background-attachment: fixed; min-height: 100vh; padding-top: 100px;">
+  <div class="kanto-container">
+    <div class="kanto-box">
+      <h1 class="kanto-title"><%= title %></h1>
+      
+      <div style="text-align: center; margin-bottom: 20px; padding: 10px; border: 2px solid #ccc; background: #f9f9f9; border-radius: 8px;">
+        <p style="font-family: 'Press Start 2P'; font-size: 10px; color: #333;">CARTA: <%= product.card&.name %></p>
+        <p style="font-family: 'Press Start 2P'; font-size: 8px; color: #666;"><%= product.card&.expansion %> - <%= product.card&.card_number %></p>
+      </div>
+
+      <%= form_with(model: product, scope: :product, url: product.new_record? ? products_path : product_path(product), class: "kanto-form") do |f| %>
+      
+        <% if product.errors.any? %>
+          <div style="background: #E3350D; color: white; padding: 15px; border: 3px solid #222224; border-radius: 4px; margin-bottom: 20px; box-shadow: 2px 2px 0px #222224;">
+            <p style="font-size: 10px; margin-bottom: 10px;">¡Oops! Algo falló:</p>
+            <ul style="font-size: 8px; margin: 0; padding-left: 20px; line-height: 1.5;">
+              <% product.errors.full_messages.each do |msg| %>
+                <li><%= msg %></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+
+        <div class="kanto-field-row">
+          <div class="kanto-field">
+            <%= f.label :price, "PRECIO ($)", class: "kanto-label" %>
+            <%= f.number_field :price, class: "kanto-input", placeholder: "Ej: 15000", min: 0, step: 0.01, required: true %>
+          </div>
+
+          <div class="kanto-field">
+            <%= f.label :stock, "STOCK", class: "kanto-label" %>
+            <%= f.number_field :stock, class: "kanto-input", placeholder: "Ej: 1", min: 1, required: true %>
+          </div>
+        </div>
+
+        <div class="kanto-field">
+          <%= f.label :condition, "ESTADO DE LA CARTA", class: "kanto-label" %>
+          <%= f.select :condition, ['Mint', 'Near Mint', 'Played'], { include_blank: "Seleccionar..." }, class: "kanto-input kanto-select", required: true %>
+        </div>
+
+        <div class="kanto-actions">
+          <%= link_to t('products.actions.cancel'), my_products_products_path, class: "kanto-btn kanto-btn-cancel btn-interactive" %>
+          <%= f.submit "GUARDAR CAMBIOS", class: "kanto-btn kanto-btn-submit btn-interactive" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<style>
+  .kanto-container {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+  }
+
+  .kanto-box {
+    background-color: rgba(252, 252, 252, 0.95);
+    border: 4px solid #222224;
+    border-radius: 8px;
+    box-shadow: 
+      inset 0 0 0 2px #fff, 
+      inset 0 0 0 4px #222224, 
+      4px 4px 0px 0px rgba(0,0,0,0.5);
+    padding: 30px;
+    max-width: 600px;
+    width: 100%;
+    font-family: 'Press Start 2P', cursive;
+  }
+
+  .kanto-title {
+    color: #E3350D;
+    font-size: 16px;
+    text-align: center;
+    margin-bottom: 30px;
+    border-bottom: 4px dashed #222224;
+    padding-bottom: 15px;
+    text-transform: uppercase;
+  }
+
+  .kanto-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .kanto-field-row {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+
+  .kanto-field {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    gap: 8px;
+  }
+
+  .kanto-label {
+    font-size: 8px;
+    color: #222224;
+    text-transform: uppercase;
+  }
+
+  .kanto-input {
+    background-color: #fff;
+    border: 2px solid #222224;
+    border-radius: 4px;
+    padding: 10px;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 8px;
+    color: #222224;
+    outline: none;
+    box-shadow: inset 2px 2px 0px rgba(0,0,0,0.1);
+  }
+
+  .kanto-input:focus {
+    background-color: #f0f8ff;
+    border-color: #30a7d7;
+  }
+
+  .kanto-select {
+    cursor: pointer;
+    appearance: none;
+    background-image: url('data:image/svg+xml;utf8,<svg width="10" height="8" viewBox="0 0 10 8" fill="%23222224" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h10L5 8z"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    padding-right: 30px;
+  }
+
+  .kanto-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 4px dashed #222224;
+  }
+
+  .kanto-btn {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 10px;
+    padding: 12px 20px;
+    border: 3px solid #222224;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+    box-shadow: 2px 2px 0px #222224;
+    transition: transform 0.1s, box-shadow 0.1s;
+    display: inline-block;
+  }
+
+  .kanto-btn:active {
+    transform: translate(2px, 2px);
+    box-shadow: 0px 0px 0px #222224;
+  }
+
+  .kanto-btn-cancel {
+    background-color: #fff;
+    color: #222224;
+  }
+
+  .kanto-btn-submit {
+    background-color: #30a7d7;
+    color: white;
+  }
+</style>

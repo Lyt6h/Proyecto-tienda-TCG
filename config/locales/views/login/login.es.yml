@@ -1,0 +1,9 @@
+es:
+  login:
+    title: "¡BIENVENIDO, ENTRENADOR!"
+    email_placeholder: "Nombre de usuario o email"
+    password_placeholder: "Contraseña"
+    submit: "INICIAR SESIÓN"
+    forgot_password: "¿Olvidaste tu contraseña?"
+    no_account: "¿No tienes cuenta?"
+    register: "¡Regístrate!"

@@ -1,0 +1,88 @@
+es:
+  layout:
+    sign_out: "Salir"
+    sign_in: "Iniciar Sesión"
+    sign_up: "Registrarse"
+    sell: "Vender"
+    buy: "Comprar"
+    my_cards: "Mis Cartas"
+    publish_new_card: "Publicar Nueva Carta"
+    language: "Idioma"
+    profile: "Tu perfil"
+    coming_soon: "Proximamente"
+    spanish: "Espanol"
+    english: "Ingles"
+    my_purchases: "Mis Compras 📦"
+    my_sales: "Mis Ventas 💰"
+    logout_success_title: "¡SESIÓN CERRADA!"
+    logout_success_body: "Has cerrado sesión correctamente. ¡Vuelve pronto a tu aventura Pokémon!"
+  
+  products:
+    form:
+      name: "NOMBRE POKÉMON"
+      energy: "TIPO ENERGÍA"
+      description: "DESCRIPCIÓN"
+      price: "PRECIO ($)"
+      stock: "CANTIDAD"
+      psa: "CONDICIÓN"
+      rarity: "RAREZA"
+      year: "AÑO EDICIÓN"
+      placeholder_name: "Ej: Charizard"
+      placeholder_desc: "Detalles de la carta..."
+    titles:
+      sell: "PUBLICAR CARTA"
+      edit: "EDITAR CARTA"
+    actions:
+      edit: "EDITAR"
+      delete: "BORRAR"
+      save: "GUARDAR EN BOLSA"
+      cancel: "CANCELAR"
+      confirm_delete: "¿Seguro que quieres liberar esta carta?"
+      no_cards: "No tienes cartas publicadas aún."
+    notices:
+      created: "¡Carta publicada con éxito!"
+      updated: "¡Carta actualizada correctamente!"
+      deleted: "¡Carta eliminada de tu bolsa!"
+  
+  favorites:
+    title: "Mi Wishlist ⭐️"
+    best_price: "Mejor precio:"
+    add_to_cart: "Añadir al carrito 🛒"
+    out_of_stock: "🚫 AGOTADA POR AHORA"
+    remove: "Quitar 🗑️"
+    empty: "No tienes cartas guardadas."
+    go_search: "¡Ve a buscar cartas!"
+    back: "Volver a la Tienda"
+
+  purchases:
+    title: "Mis Compras 📦"
+    empty: "No has realizado ninguna compra aún."
+    go_shop: "¡Ir a la Tienda!"
+    back: "Volver a la Tienda"
+    order: "Pedido"
+    quantity: "Cant"
+    total: "Total"
+    leave_review: "Dejar Reseña ✍️"
+    reviews_title: "Opiniones de Compradores 💬"
+    rating: "Calificación"
+    no_reviews: "Esta carta aún no tiene reseñas. ¡Sé el primero en comprarla y opinar!"
+
+  api:
+    title: "BUSCADOR DE CARTAS (API OFICIAL)"
+    placeholder_search: "Ej: Pikachu, Lugia, Rayquaza..."
+    search: "BUSCAR"
+    go_back: "volver a mis productos"
+
+  checkout:
+    success_title: "¡Solicitud Enviada! 🚀"
+    success_body: "Tu solicitud de compra ha sido enviada al vendedor. Te notificaremos en cuanto sea aceptada para que tu aventura Pokémon continúe."
+    go_purchases: "Ir a Mis Compras 📦"
+    close: "Cerrar"
+
+  reviews:
+    new_title: "Dejar Reseña ✍️"
+    item_label: "Estrellas de la Carta:"
+    seller_label: "Estrellas del Vendedor:"
+    comment_label: "Tu Comentario:"
+    submit: "Guardar Reseña"
+    cancel: "Cancelar"

@@ -1,0 +1,127 @@
+<style>
+  /* Status Badge Styles (Synchronized with purchases/sales) */
+  .status-tag {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 7px;
+    padding: 6px 10px;
+    border-radius: 4px;
+    border: 2px solid black;
+    color: white;
+    text-transform: uppercase;
+    box-shadow: 2px 2px 0px rgba(0,0,0,0.2);
+    display: inline-block;
+    white-space: nowrap;
+  }
+  .status-pending_approval { background-color: #30a7d7; } /* Blue */
+  .status-accepted { background-color: #4CAF50; }         /* Green */
+  .status-delivered { background-color: #FFCC00; color: black; } /* Yellow */
+  .status-completed { background-color: #9C27B0; }        /* Purple */
+  .status-rejected { background-color: #E3350D; }         /* Red */
+
+  .financial-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 15px;
+    margin-bottom: 40px;
+  }
+
+  @media (max-width: 1024px) {
+    .financial-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .financial-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+</style>
+
+<div class="pokedex-background">
+  <div class="pokedex-frame-large">
+    <%= link_to t("admin.users.show.back"), admin_dashboard_path, class: "admin-btn-back btn-interactive" %>
+
+    <h1 class="admin-title"><%= t("admin.financials.title") %></h1>
+
+    <!-- KPI Cards Section -->
+    <div class="financial-grid">
+      <div class="stat-card">
+        <h3><%= t("admin.financials.kpis.total_earnings") %></h3>
+        <p><%= number_to_currency(@total_earnings) %></p>
+      </div>
+
+      <div class="stat-card">
+        <h3><%= t("admin.financials.kpis.escrow_vault") %></h3>
+        <p><%= number_to_currency(@escrow_vault) %></p>
+      </div>
+
+      <div class="stat-card">
+        <h3><%= t("admin.financials.kpis.star_seller") %></h3>
+        <p style="font-size: 8px;"><%= @star_seller %></p>
+      </div>
+
+      <div class="stat-card">
+        <h3><%= t("admin.financials.kpis.golden_day") %></h3>
+        <p><%= @golden_day %></p>
+      </div>
+
+      <div class="stat-card">
+        <h3><%= t("admin.financials.kpis.market_volume") %></h3>
+        <p><%= number_to_currency(@market_volume) %></p>
+      </div>
+    </div>
+
+    <!-- Ledger / Transaction History -->
+    <div class="catalog-section">
+      <h2 class="catalog-title"><%= t("admin.financials.ledger_btn") %></h2>
+      
+      <div style="overflow-x: auto;">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th><%= t("admin.financials.table.id") %></th>
+              <th><%= t("admin.financials.table.date") %></th>
+              <th><%= t("admin.financials.table.trainers") %></th>
+              <th><%= t("admin.financials.table.subtotal") %></th>
+              <th><%= t("admin.financials.table.fee") %></th>
+              <th><%= t("admin.financials.table.total") %></th>
+              <th><%= t("admin.financials.table.status") %></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% if @orders.any? %>
+              <% @orders.each do |order| %>
+                <tr>
+                  <td>#<%= order.id %></td>
+                  <td><%= order.created_at.strftime("%d/%m/%Y %H:%M") %></td>
+                  <td>
+                    <span title="Client"><%= order.client.username %></span> 
+                    ➡️ 
+                    <span title="Seller"><%= order.seller.username %></span>
+                  </td>
+                  <td><%= number_to_currency(order.subtotal) %></td>
+                  <td style="color: #4CAF50; font-weight: bold;">
+                    +<%= number_to_currency(order.service_fee) %>
+                  </td>
+                  <td><%= number_to_currency(order.total_price) %></td>
+                  <td>
+                    <span class="status-tag status-<%= order.status %>">
+                      <%= t("sales.#{order.status}", default: order.status.upcase) %>
+                    </span>
+                  </td>
+                </tr>
+              <% end %>
+            <% else %>
+              <tr>
+                <td colspan="7" style="text-align: center; padding: 20px;">
+                  No transactions found.
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

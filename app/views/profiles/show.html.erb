@@ -1,0 +1,235 @@
+<% content_for :back_link, root_path %>
+
+<div style="
+  min-height: 100vh;
+  background-image: url('<%= image_path("puebloPaleta.webp") %>'); 
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  image-rendering: pixelated;
+  font-family: 'Press Start 2P', cursive;
+">
+
+  <%# TRAINER CARD CONTAINER %>
+  <div style="
+    background: #fff;
+    border: 6px solid #000;
+    box-shadow: 10px 10px 0px rgba(0,0,0,0.5);
+    width: 100%;
+    max-width: 700px;
+    padding: 30px;
+    position: relative;
+  ">
+    
+    <%# HEADER %>
+    <div style="display: flex; justify-content: space-between; border-bottom: 4px solid #000; padding-bottom: 10px; margin-bottom: 25px;">
+      <span style="font-size: 14px; color: #000;"><%= t("profiles.trainer_card") %></span>
+      <span style="font-size: 10px; color: #E3350D;"><%= t("profiles.id_label") %> 00<%= @user.id %></span>
+    </div>
+
+    <%= form_with model: @user, url: profile_path, method: :patch, local: true, multipart: true, data: { turbo: false } do |f| %>
+      
+      <div style="display: flex; gap: 40px; flex-wrap: wrap;">
+        
+        <%# LEFT SIDE: Photo & Username %>
+        <div style="flex: 0 0 200px; display: flex; flex-direction: column; align-items: center; gap: 40px;">
+          
+          <%# Photo Container (Relative to position the button) %>
+          <div style="position: relative; width: 180px; height: 180px;">
+            <div id="drop-zone" style="
+              width: 100%;
+              height: 100%;
+              background: #fff;
+              border: 4px solid #000;
+              border-radius: 50%;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              overflow: hidden;
+              box-shadow: 4px 4px 0px rgba(0,0,0,0.2);
+              cursor: default;
+            ">
+              <% if @user.profile_picture.attached? %>
+                <%= image_tag @user.profile_picture, id: "profile-preview", style: "width: 100%; height: 100%; object-fit: cover; image-rendering: pixelated;" %>
+              <% else %>
+                <%# Default Avatar Local %>
+                <%= image_tag "default_trainer.png", id: "profile-preview", style: "width: 100%; image-rendering: pixelated; margin-top: 10px;" %>
+              <% end %>
+            </div>
+
+            <%# HIDDEN INPUT - MOVED OUTSIDE DROP-ZONE TO AVOID DELETION BY JS %>
+            <%= f.file_field :profile_picture, id: "profile-input", style: "display: none;", accept: 'image/*' %>
+
+            <%# CAMERA EDIT BUTTON - Superimposed at the bottom %>
+            <div id="edit-photo-trigger" style="
+              position: absolute;
+              bottom: -15px;
+              left: 50%;
+              transform: translateX(-50%);
+              display: flex;
+              align-items: center;
+              gap: 8px;
+              background: #78C850;
+              border: 2px solid #000;
+              padding: 6px 10px;
+              cursor: pointer;
+              box-shadow: 3px 3px 0px #000;
+              transition: all 0.1s;
+              z-index: 10;
+              white-space: nowrap;
+            " onmouseover="this.style.transform='translateX(-50%) translate(-1px, -1px)'; this.style.boxShadow='4px 4px 0px #000';" onmouseout="this.style.transform='translateX(-50%)'; this.style.boxShadow='3px 3px 0px #000';">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square">
+                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                <circle cx="12" cy="13" r="4"></circle>
+              </svg>
+              <span style="font-size: 6px;"><%= t("profiles.edit_button").upcase %></span>
+            </div>
+          </div>
+
+          <div style="text-align: center;">
+            <span style="font-size: 8px; color: #666; display: block; margin-bottom: 5px;"><%= t("profiles.username").upcase %>:</span>
+            <span style="font-size: 12px; border-bottom: 2px solid #000; padding: 2px 10px;"><%= @user.username %></span>
+          </div>
+        </div>
+
+        <%# RIGHT SIDE: Personal Data %>
+        <div style="flex: 1; min-width: 250px; display: flex; flex-direction: column; gap: 15px;">
+          
+          <%# EMAIL %>
+          <div>
+            <label style="font-size: 7px; color: #666; display: block; margin-bottom: 5px;"><%= t("profiles.email").upcase %>:</label>
+            <div style="font-size: 9px; background: rgba(255,255,255,0.5); padding: 8px; border: 2px solid #000; border-radius: 4px;"><%= @user.email_address %></div>
+          </div>
+
+          <%# FULL NAME %>
+          <div>
+            <label style="font-size: 7px; color: #666; display: block; margin-bottom: 5px;"><%= t("profiles.full_name").upcase %>:</label>
+            <%= f.text_field :full_name, placeholder: t("profiles.full_name_placeholder"), style: "width: 100%; font-family: 'Press Start 2P'; font-size: 9px; padding: 8px; border: 2px solid #000; border-radius: 4px; box-sizing: border-box;" %>
+          </div>
+
+          <%# PHONE %>
+          <div>
+            <label style="font-size: 7px; color: #666; display: block; margin-bottom: 5px;"><%= t("profiles.phone").upcase %>:</label>
+            <%= f.text_field :phone_number, placeholder: t("profiles.phone_placeholder"), style: "width: 100%; font-family: 'Press Start 2P'; font-size: 9px; padding: 8px; border: 2px solid #000; border-radius: 4px; box-sizing: border-box;" %>
+          </div>
+
+          <%# ADDRESS SECTION %>
+          <div style="border: 2px solid #000; padding: 10px; border-radius: 4px; background: rgba(255,255,255,0.3);">
+            <label style="font-size: 7px; color: #000; display: block; margin-bottom: 10px; font-weight: bold;"><%= t("profiles.address_title").upcase %>:</label>
+            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 10px; margin-bottom: 10px;">
+              <%= f.text_field :street, placeholder: t("profiles.street_placeholder"), style: "font-family: 'Press Start 2P'; font-size: 7px; padding: 5px; border: 2px solid #000;" %>
+              <%= f.text_field :number, placeholder: t("profiles.number_placeholder"), style: "font-family: 'Press Start 2P'; font-size: 7px; padding: 5px; border: 2px solid #000;" %>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+              <%= f.text_field :district, placeholder: t("profiles.district_placeholder"), style: "font-family: 'Press Start 2P'; font-size: 7px; padding: 5px; border: 2px solid #000;" %>
+              <%= f.text_field :city, placeholder: t("profiles.city_placeholder"), style: "font-family: 'Press Start 2P'; font-size: 7px; padding: 5px; border: 2px solid #000;" %>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <%# ACTION BUTTON %>
+      <div style="margin-top: 30px; text-align: right;">
+        <%= f.submit t("profiles.save_button").upcase, class: "btn-interactive", style: "
+          background: #E3350D;
+          color: white;
+          border: 3px solid black;
+          padding: 12px 25px;
+          font-family: 'Press Start 2P', cursive;
+          font-size: 10px;
+          cursor: pointer;
+        " %>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<%# MODAL CROPPER %>
+<div id="cropper-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:10000; flex-direction:column; align-items:center; justify-content:center;">
+  <div style="background:white; padding:20px; border:4px solid black; max-width:90%; max-height:80vh; display:flex; flex-direction:column;">
+    <h3 style="font-family:'Press Start 2P'; font-size:10px; margin-bottom:15px; text-align:center;"><%= t("profiles.adjust_photo") %></h3>
+    <div style="max-width:400px; max-height:400px; overflow:hidden;">
+      <img id="cropper-image" src="" style="max-width:100%; display:block;">
+    </div>
+    <div style="margin-top:20px; display:flex; gap:10px; justify-content:center;">
+      <button type="button" id="cancel-crop" style="background:#ccc; border:2px solid black; padding:10px; font-family:'Press Start 2P'; font-size:8px; cursor:pointer;"><%= t("profiles.cancel_button").upcase %></button>
+      <button type="button" id="confirm-crop" style="background:#E3350D; color:white; border:2px solid black; padding:10px; font-family:'Press Start 2P'; font-size:8px; cursor:pointer;"><%= t("profiles.crop_button").upcase %></button>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener("turbo:load", () => {
+    const dropZone = document.getElementById("drop-zone");
+    const editTrigger = document.getElementById("edit-photo-trigger");
+    const input = document.getElementById("profile-input");
+    const modal = document.getElementById("cropper-modal");
+    const cropperImage = document.getElementById("cropper-image");
+    const confirmBtn = document.getElementById("confirm-crop");
+    const cancelBtn = document.getElementById("cancel-crop");
+    let cropper;
+
+    const startCropper = (file) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        cropperImage.src = e.target.result;
+        modal.style.display = "flex";
+        if (cropper) cropper.destroy();
+        cropper = new Cropper(cropperImage, {
+          aspectRatio: 1,
+          viewMode: 1,
+          guides: false,
+          autoCropArea: 1,
+        });
+      };
+      reader.readAsDataURL(file);
+    };
+
+    // Trigger file selection only from the edit button
+    editTrigger?.addEventListener("click", () => input.click());
+    
+    input?.addEventListener("change", (e) => {
+      if (e.target.files.length > 0) startCropper(e.target.files[0]);
+    });
+
+    cancelBtn?.addEventListener("click", () => {
+      modal.style.display = "none";
+      input.value = "";
+      if (cropper) cropper.destroy();
+    });
+
+    confirmBtn?.addEventListener("click", () => {
+      const canvas = cropper.getCroppedCanvas({ width: 400, height: 400 });
+      canvas.toBlob((blob) => {
+        const croppedFile = new File([blob], "avatar.png", { type: "image/png" });
+        const dataTransfer = new DataTransfer();
+        dataTransfer.items.add(croppedFile);
+        input.files = dataTransfer.files;
+
+        const previewUrl = URL.createObjectURL(blob);
+        let imgPreview = document.getElementById("profile-preview");
+        
+        // Simple update: just change the src, don't destroy any parent HTML
+        if (imgPreview) {
+          imgPreview.src = previewUrl;
+          imgPreview.style.width = "100%";
+          imgPreview.style.height = "100%";
+          imgPreview.style.objectFit = "cover";
+        }
+
+        modal.style.display = "none";
+        if (cropper) cropper.destroy();
+        alert("<%= t("profiles.image_adjusted_alert") %>");
+      });
+    });
+
+    dropZone?.addEventListener("dragover", (e) => e.preventDefault());
+    dropZone?.addEventListener("drop", (e) => {
+      e.preventDefault();
+      if (e.dataTransfer.files.length > 0) startCropper(e.dataTransfer.files[0]);
+    });
+  });
+</script>

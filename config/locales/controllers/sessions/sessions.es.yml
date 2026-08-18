@@ -1,0 +1,7 @@
+es:
+  flash:
+    sessions:
+      rate_limit: "Intentalo mas tarde."
+      welcome: "¡Bienvenido, entrenador!"
+      welcome_admin: "¡Bienvenido, admin!"
+      invalid_credentials: "Prueba otro email o contraseña."

@@ -1,0 +1,49 @@
+<footer class="footer">
+  <div class="pokeball-button"></div>
+  <div class="footer-container">
+
+    <div class="footer-section">
+      <h4><%= t('products.footer.contact') %></h4>
+      <p>📍 Av. Vicuña Mackenna 4860, Macul</p>
+      <p>📍 <%= t('products.footer.direction') %></p>
+      <p>📧 <%= link_to t('products.footer.support_link', default: "Contactar a Soporte"), support_path, style: "color: #E3350D; text-decoration: none;" %></p>
+      <p>📞 +56 9 1234 5678</p>
+    </div>
+
+    <div class="footer-section">
+      <h4><%= t('products.footer.social_media') %></h4>
+      <div class="social-links">
+        <%= link_to "https://www.instagram.com/pokemon/", target: "_blank", rel: "noopener", class: "social-item" do %>
+          <i class="fab fa-instagram"></i> Instagram
+        <% end %>
+
+        <%= link_to "https://www.instagram.com/pokemon/", target: "_blank", rel: "noopener", class: "social-item" do %>
+          <i class="fab fa-twitter"></i> Twitter
+        <% end %>
+
+        <%= link_to "https://discord.gg", target: "_blank", rel: "noopener", class: "social-item" do %>
+          <i class="fab fa-discord"></i> Discord
+            <% end %>
+      </div>
+    </div>
+
+    <div class="footer-section">
+      <h4> <%= t('products.footer.developers') %> </h4>
+        <p>
+          <%= link_to "Pedro González", "https://github.com/DropeG", target: "_blank", rel: "noopener", 
+              class: "dev-link", style: "color: inherit; text-decoration: none; transition: all 0.2s;" %>
+        </p>
+        <p>Erick Plaza </p>
+        <p>Matias Palomera </p>
+        <p>© 2026 - <%= Time.current.year %> </p>
+    </div>
+
+    <style>
+      .dev-link:hover {
+        color: #30a7d7 !important;
+        text-shadow: 1px 1px 0px black;
+        letter-spacing: 1px;
+      }
+    </style>
+  </div>
+</footer>

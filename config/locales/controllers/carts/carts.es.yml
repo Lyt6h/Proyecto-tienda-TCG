@@ -1,0 +1,12 @@
+es:
+  flash:
+    carts:
+      out_of_stock: "¡Oh no! No quedan unidades de %{product_name}."
+      added: "¡%{product_name} atrapado y en la mochila!"
+      add_error: "Error al atrapar la carta."
+      decreased: "Soltaste una carta."
+      removed: "Carta eliminada de la mochila."
+      missing: "Esa carta no esta en tu carrito."
+      empty: "¡Tu mochila está vacía! Sal a buscar cartas."
+      checkout_success: "¡Trato hecho! Has comprado las cartas y los vendedores han sido notificados."
+      checkout_error: "Hubo un fallo en la conexión. Intenta la compra de nuevo."

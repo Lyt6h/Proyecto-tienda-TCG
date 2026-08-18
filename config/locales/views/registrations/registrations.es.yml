@@ -1,0 +1,30 @@
+es:
+  registrations:
+    title: "NUEVO ENTRENADOR"
+    username_placeholder: "Tu nombre de usuario"
+    email_placeholder: "Tu email"
+    password_placeholder: "Crea una contraseña"
+    password_confirmation_placeholder: "Confirma contraseña"
+    submit: "REGISTRARSE"
+    already_have_account: "¿Ya tienes cuenta?"
+    sign_in: "¡Inicia Sesión!"
+
+  activerecord:
+    attributes:
+      user:
+        username: "Nombre de usuario"
+        email_address: "Email"
+        password: "Contraseña"
+        password_confirmation: "Confirmación de contraseña"
+    errors:
+      messages:
+        blank: "no puede estar en blanco"
+        taken: "ya ha sido tomado"
+        too_short: "es demasiado corto (mínimo %{count} caracteres)"
+        confirmation: "no coincide con %{attribute}"
+        invalid_characters: "solo puede contener letras y números"
+      models:
+        user:
+          attributes:
+            username:
+              invalid_characters: "solo puede contener letras y números"

@@ -1,0 +1,51 @@
+<header class="main-header">
+  <div class="header-container">
+    <div class="title">
+      <h1><%= t("products.title") %></h1>
+    </div> 
+
+    <%= form_with url: products_path, method: :get, local: true, class: "filter-form" do |f| %>
+      <div class="search-group-filter">
+        <%= f.text_field :name, value: params[:name], placeholder: t("products.search_placeholder"), class: "search-input btn-interactive" %>
+        <%= f.submit "🔍", class: "btn-search btn-interactive" %>
+        
+
+        <label><%= t("products.filter_year") %></label>
+        <%= f.select :year, options_for_select((1995..Time.now.year).to_a.reverse, params[:year]), { include_blank: t("products.all_option"), selected: params[:year]}, { onchange: "this.form.submit();", class: "filter-select" } %>
+        <label><%= t("products.filter_condition") %></label>
+        <%= f.select :condition, options_for_select(["Mint", "Near Mint", "Played"], params[:condition]), { include_blank: t("products.any_option") }, { onchange: "this.form.submit();", class: "filter-select" } %>
+        
+
+        <label><%= t("products.filter_energy") %></label>
+        <%= f.select :energy_type, options_for_select([
+          [t('products.energy_options.grass'), 'Grass'], [t('products.energy_options.fire'), 'Fire'], [t('products.energy_options.water'), 'Water'], 
+          [t('products.energy_options.lightning'), 'Lightning'], [t('products.energy_options.psychic'), 'Psychic'], [t('products.energy_options.fighting'), 'Fighting'], 
+          [t('products.energy_options.darkness'), 'Darkness'], [t('products.energy_options.metal'), 'Metal'], [t('products.energy_options.fairy'), 'Fairy']
+        ], params[:energy_type]),
+        { include_blank: t("products.all_option") }, 
+        { onchange: 'this.form.submit();', class: "filter-select" } %>
+        
+
+        <label><%= t("products.filter_rarity") %></label>
+        <%= f.select :rarity, options_for_select([
+          [t('products.rarity_options.common'), "Common"], [t('products.rarity_options.uncommon'), "Uncommon"], [t('products.rarity_options.rare'), "Rare"], 
+          [t('products.rarity_options.rare_holo'), "Rare Holo"], [t('products.rarity_options.promo'), "Promo"]
+        ], params[:rarity]), 
+        { include_blank: t("products.all_option") },
+        { onchange: "this.form.submit();", class: "filter-select" } %>
+        
+      </div>
+
+      <%= f.hidden_field :direction, value: params[:direction] %>
+    <% end %>
+    </div>
+
+  <hr style="border: 1px solid #E3350D; margin: 10px 0;">
+
+  <div class="sort-links">
+    <strong><%= t("products.sort_price") %></strong>
+    <%= link_to t("products.lower_price"), products_path(direction: "asc", name: params[:name], year: params[:year], condition: params[:condition], rarity: params[:rarity], energy_type: params[:energy_type]), style: "margin-right: 15px; color: #E3350D; text-decoration: none; font-size: 8px; font-family: 'Press Start 2P';" %>
+    <%= link_to t("products.higher_price"), products_path(direction: "desc", name: params[:name], year: params[:year], condition: params[:condition], rarity: params[:rarity], energy_type: params[:energy_type]), style: "color: #30a7d7; text-decoration: none; font-size: 8px; font-family: 'Press Start 2P';" %>
+    <%= link_to t("products.clear_filters"), products_path, class: "btn-reset btn-interactive" %>
+  </div>
+</header>

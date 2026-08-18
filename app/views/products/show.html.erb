@@ -1,0 +1,165 @@
+<div class="pokedex-background" style="background-color: #E3350D; min-height: 100vh; display: flex; align-items: center; justify-content: center;">
+  <div class="pokedex-frame" style="background: white; border: 6px solid black; border-radius: 20px; padding: 40px 30px 30px 30px; box-shadow: 10px 10px 0px rgba(0,0,0,0.2); max-width: 700px; width: 90%; display: flex; gap: 30px; position: relative;">
+    
+    <%# Botón Volver %>
+    <%= link_to t("products.back"), products_path,
+        class: "btn-interactive",
+        style: "position: absolute; top: 10px; left: 15px; text-decoration: none; background: #333; color: white; padding: 4px 10px; border-radius: 4px; font-family: 'Press Start 2P', cursive; font-size: 6px; border: 2px solid black;" %>
+
+    <%# Imagen de la Carta y Vendedor (Columna Izquierda) %>
+    <div style="flex: 0 0 200px; display: flex; flex-direction: column; align-items: center; margin-top: 20px;">
+      <% if @product.card.image_url.present? %>
+        <div data-controller="card-tilt"
+             data-card-tilt-rarity-value="<%= @product.card.rarity %>"
+             data-card-tilt-angle-value="50"
+             data-card-tilt-perspective-value="500"
+             data-card-tilt-scale-value="2.0"
+             data-card-tilt-return-value="1200"
+             style="position: relative; width: 100%;">
+          <img src="<%= @product.card.image_url %>"
+               alt="<%= @product.card.name %>"
+               class="card-inspec"
+               style="width: 100%; border: 3px solid black; border-radius: 8px; image-rendering: pixelated; display: block;">
+          <div class="card-rainbow" style="position: absolute; inset: 0; border-radius: 8px; pointer-events: none; opacity: 0; transition: opacity 0.2s; background: linear-gradient(135deg, rgba(255,0,128,0.35), rgba(255,165,0,0.35), rgba(255,255,0,0.35), rgba(0,255,128,0.35), rgba(0,200,255,0.35), rgba(128,0,255,0.35)); background-size: 200% 200%; mix-blend-mode: screen;"></div>
+          <div class="card-glitter" style="position: absolute; inset: 0; border-radius: 8px; pointer-events: none; opacity: 0; transition: opacity 0.2s; background-image: radial-gradient(circle, rgba(255,255,255,0.9) 1px, transparent 1px), radial-gradient(circle, rgba(255,200,255,0.7) 1px, transparent 1px); background-size: 40px 40px, 60px 60px;"></div>
+          <div class="card-sheen"   style="position: absolute; inset: 0; border-radius: 8px; pointer-events: none; opacity: 0; transition: opacity 0.2s;"></div>
+          <div class="card-shine"   style="position: absolute; inset: 0; border-radius: 8px; pointer-events: none; opacity: 0; transition: opacity 0.15s;"></div>
+        </div>
+      <% end %>
+
+      <%# Nuevo Bloque de Vendedor (Convertido en Botón Completo) %>
+      <%= link_to trainer_path(@product.seller), 
+          class: "btn-interactive", 
+          style: "margin-top: 20px; width: 100%; background: #fdfdfd; border: 3px solid black; border-radius: 8px; padding: 10px; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 4px 4px 0px rgba(0,0,0,0.1); text-decoration: none; color: inherit;" do %>
+        
+        <div style="width: 64px; height: 64px; border-radius: 50%; border: 2px solid black; overflow: hidden; display: flex; align-items: center; justify-content: center; background: white; flex-shrink: 0;">
+          <% if @product.seller.profile_picture.attached? %>
+            <%= image_tag url_for(@product.seller.profile_picture), style: "width: 100%; height: 100%; object-fit: cover; image-rendering: pixelated;" %>
+          <% else %>
+            <%= image_tag "default_trainer.png", style: "width: 100%; image-rendering: pixelated; margin-top: 5px;" %>
+          <% end %>
+        </div>
+
+        <div style="display: flex; flex-direction: column; align-items: flex-start; justify-content: center; overflow: hidden;">
+          <span style="font-family: 'Press Start 2P', cursive; font-size: 6px; color: #666; margin-bottom: 3px;"><%= t("products.seller").upcase %></span>
+          <span style="font-family: 'Press Start 2P', cursive; font-size: 8px; color: #E3350D; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 120px;">
+            <%= @product.seller.username %>
+          </span>
+        </div>
+      <% end %>
+    </div>
+
+    <%# Detalles de la Publicación (Columna Derecha) %>
+    <div style="flex: 1; display: flex; flex-direction: column; justify-content: center;">
+      
+      <h1 style="font-family: 'Press Start 2P', cursive; font-size: 16px; margin-bottom: 2px; color: #333;"><%= @product.card.name.upcase %></h1>
+      <p style="font-family: 'Press Start 2P', cursive; font-size: 8px; color: #E3350D; margin-bottom: 15px;">SET: <%= @product.card.expansion %></p>
+
+      <div style="background: #fdfdfd; border: 3px solid black; padding: 12px; border-radius: 8px; font-family: 'Press Start 2P', cursive; font-size: 7px; line-height: 1.8; box-shadow: inset 2px 2px 0px rgba(0,0,0,0.05);">
+        <p><strong><%= t("products.rarity_label") %></strong> <%= @product.card.rarity %></p>
+        <p><strong><%= t("products.type_label") %></strong> <%= @product.card.energy_type %></p>
+        <p><strong><%= t("products.year_label") %></strong> <%= @product.card.release_year %></p>
+        <p><strong><%= t("products.number_label") %></strong> <%= @product.card.card_number %></p>
+        <hr style="border: 1px dashed #ccc; margin: 10px 0;">
+        <p><strong><%= t("products.filter_condition") %></strong> <span style="color: #30a7d7;"><%= @product.condition.upcase %></span></p>
+        <p><strong><%= t("products.stock") %></strong> <%= @product.stock %> <%= t("products.units") %></p>
+      </div>
+
+      <div style="margin-top: 15px; display: flex; align-items: center; gap: 10px; background: #333; padding: 12px; border-radius: 8px; border: 3px solid black;">
+        <span style="font-family: 'Press Start 2P', cursive; font-size: 14px; color: #FFCC00; flex-grow: 1;">$<%= @product.price %></span>
+        
+        <% if authenticated? %>
+          <% if @favorite %>
+            <%= button_to favorite_path(@favorite), method: :delete, style: "background: white; color: #E3350D; border: 1px solid white; padding: 8px; cursor: pointer; font-size: 14px; border-radius: 4px; display: flex; align-items: center; justify-content: center;", class: "btn-interactive", title: "Wishlist" do %>
+              ❤️
+            <% end %>
+          <% else %>
+            <%= button_to favorites_path(card_id: @product.card_id), method: :post, style: "background: white; color: #E3350D; border: 1px solid white; padding: 8px; cursor: pointer; font-size: 14px; border-radius: 4px; display: flex; align-items: center; justify-content: center;", class: "btn-interactive", title: "Wishlist" do %>
+              🤍
+            <% end %>
+          <% end %>
+
+          <%= button_to add_item_cart_path(listing_id: @product.id), method: :post, style: "background: #4CAF50; color: white; border: 1px solid white; padding: 8px 12px; cursor: pointer; font-family: 'Press Start 2P', cursive; font-size: 7px; border-radius: 4px;", class: "btn-interactive" do %>
+            <%= t("products.add_to_cart") %>
+          <% end %>
+        <% else %>
+          <button onclick="document.getElementById('login-required-popup').style.display='flex'" style="background: white; color: #E3350D; border: 1px solid white; padding: 8px; cursor: pointer; font-size: 14px; border-radius: 4px; display: flex; align-items: center; justify-content: center;" class="btn-interactive" title="Wishlist">
+            🤍
+          </button>
+
+          <button onclick="document.getElementById('login-required-popup').style.display='flex'" style="background: #4CAF50; color: white; border: 1px solid white; padding: 8px 12px; cursor: pointer; font-family: 'Press Start 2P', cursive; font-size: 7px; border-radius: 4px;" class="btn-interactive">
+            <%= t("products.add_to_cart") %>
+          </button>
+        <% end %>
+      </div>
+
+      <%# --- POP-UP DE LOGIN REQUERIDO PARA VISITANTES --- %>
+      <div id="login-required-popup" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.8); display: none; align-items: center; justify-content: center; z-index: 9999;">
+        <div style="background: white; border: 6px solid black; padding: 40px 30px; text-align: center; max-width: 450px; font-family: 'Press Start 2P', cursive; box-shadow: 10px 10px 0px #30a7d7; position: relative;">
+          
+          <button onclick="document.getElementById('login-required-popup').style.display='none'" style="position: absolute; top: 10px; right: 15px; background: none; border: none; font-size: 16px; font-family: 'Press Start 2P', cursive; cursor: pointer; color: #E3350D;" class="btn-interactive">X</button>
+
+          <h2 style="font-size: 14px; color: #30a7d7; margin-bottom: 25px; line-height: 1.4;">
+            <%= t("products.notices.login_required_title", default: "¡NECESITAS UNA CUENTA!") %>
+          </h2>
+          
+          <p style="font-size: 8px; line-height: 1.8; margin-bottom: 35px; color: #333;">
+            <%= t("products.notices.login_required_body", default: "Para poder añadir productos al carro y realizar compras, debes iniciar sesión en la plataforma.") %>
+          </p>
+          
+          <div style="display: flex; flex-direction: column; gap: 15px;">
+            <%= link_to t("layout.sign_in", default: "INICIAR SESIÓN"), new_session_path, class: "btn-interactive", style: "background: #4CAF50; color: white; border: 3px solid black; padding: 15px; text-decoration: none; font-size: 9px; cursor: pointer;" %>
+            <%= link_to t("layout.sign_up", default: "REGISTRARSE"), new_registration_path, class: "btn-interactive", style: "background: #FFCC00; color: black; border: 3px solid black; padding: 15px; text-decoration: none; font-size: 9px; cursor: pointer;" %>
+          </div>
+        </div>
+      </div>
+
+      <div style="font-family: 'Press Start 2P', cursive; margin-top: 30px; border-top: 4px dashed black; padding-top: 20px;">
+        <h3 style="font-size: 12px; margin-bottom: 20px;"><%= t("purchases.reviews_title") %></h3>
+
+        <% if @card_reviews.any? %>
+          <div style="display: flex; flex-direction: column; gap: 15px;">
+            <% @card_reviews.each do |rev| %>
+              <% reviewer = rev.order_item.order.client %>
+              <div style="background: #f8f8f8; border: 2px solid black; padding: 15px; box-shadow: 4px 4px 0px black; text-align: left;">
+
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                  <% if reviewer.profile_picture.attached? %>
+                    <%= image_tag url_for(reviewer.profile_picture), style: "width: 32px; height: 32px; border-radius: 50%; border: 2px solid black; object-fit: cover; flex-shrink: 0;" %>
+                  <% else %>
+                    <%= image_tag "default_trainer.png", style: "width: 32px; height: 32px; border-radius: 50%; border: 2px solid black; object-fit: cover; flex-shrink: 0; image-rendering: pixelated;" %>
+                  <% end %>
+
+                  <div style="flex: 1; min-width: 0;">
+                    <span style="font-size: 7px; color: #333; display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                      <%= reviewer.username %>
+                      <span style="color: #4CAF50; font-size: 5px; margin-left: 5px;">[<%= t("reviews.verified_purchase", default: "COMPRA VERIFICADA") %> ✅]</span>
+                    </span>
+                    <span style="font-size: 6px; color: #666;"><%= rev.created_at.strftime("%d/%m/%Y") %></span>
+                  </div>
+
+                  <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 5px; flex-shrink: 0;">
+                    <span style="font-size: 8px; color: #FFCC00; background: #333; padding: 4px 6px; border-radius: 3px;">
+                      <%= "★" * rev.item_rating %><%= "☆" * (5 - rev.item_rating) %>
+                    </span>
+                    <% if Current.user && Current.user != reviewer && !rev.reported? %>
+                      <%= button_to report_review_path(rev), method: :patch, class: "btn-interactive", style: "background: #E3350D; color: white; border: 1px solid black; font-size: 4px; padding: 2px 4px; font-family: 'Press Start 2P', cursive; cursor: pointer;" do %>
+                        🚩 <%= t("reviews.report") %>
+                      <% end %>
+                    <% elsif rev.reported? %>
+                      <span style="font-size: 4px; color: #E3350D;">[<%= t("reviews.reported_status") %>]</span>
+                    <% end %>
+                  </div>
+                </div>
+
+                <div style="font-size: 8px; line-height: 1.5; margin: 0; color: black; overflow-y: auto; max-height: 60px; font-family: 'Press Start 2P', cursive; word-break: break-all; overflow-wrap: break-word;">"<%= rev.comment %>"</div>
+              </div>
+            <% end %>
+          </div>
+        <% else %>
+          <p style="font-size: 8px; color: #666; margin-top: 10px;"><%= t("purchases.no_reviews") %></p>
+        <% end %>
+      </div>
+      </div>
+  </div>
+</div>

@@ -1,0 +1,12 @@
+en:
+  flash:
+    carts:
+      out_of_stock: "Oh no! There are no units left for %{product_name}."
+      added: "%{product_name} caught and added to your bag!"
+      add_error: "Error catching the card."
+      decreased: "You dropped one card."
+      removed: "Card removed from your bag."
+      missing: "That card is not in your cart."
+      empty: "Your bag is empty! Go out and find some cards."
+      checkout_success: "Deal done! You've bought the cards and the sellers have been notified."
+      checkout_error: "Connection failure. Please try the purchase again."

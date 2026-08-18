@@ -1,0 +1,14 @@
+es:
+  cart:
+    title: "Tu mochila"
+    card: "CARTA"
+    price: "PRECIO"
+    quantity: "CANT."
+    action: "ACCION"
+    drop: "Soltar"
+    total: "TOTAL"
+    subtotal: "SUBTOTAL"
+    service_fee: "COMISION"
+    empty: "Tu mochila esta vacia..."
+    back_to_store: "Volver a la tienda"
+    pay_all: "Pagar todo"

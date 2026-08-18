@@ -1,0 +1,73 @@
+<%# app/views/admin/dashboard/index.html.erb %>
+
+<div class="pokedex-background">
+  <div class="pokedex-frame-large">
+    <h1 class="admin-title"><%= t("admin.dashboard.title") %></h1>
+
+    <div style="display: flex; justify-content: flex-end; margin-bottom: 20px;">
+      <%= link_to t("admin.financials.ledger_btn"), admin_financials_path, class: "admin-btn-blue btn-interactive", style: "font-size: 10px; padding: 12px 20px; margin-right: 10px;" %>
+      <%= link_to t("support.admin.mailbox_btn"), admin_support_messages_path, class: "admin-btn-yellow btn-interactive", style: "font-size: 10px; padding: 12px 20px;" %>
+    </div>
+
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th><%= t("admin.dashboard.table.id") %></th>
+          <th><%= t("profiles.photo", default: "Photo") %></th>
+          <th><%= t("admin.dashboard.table.username") %></th>
+          <th><%= t("admin.dashboard.table.email") %></th>
+          <th><%= t("admin.dashboard.table.cards") %></th>
+          <th><%= t("admin.dashboard.table.status") %></th>
+          <th><%= t("admin.dashboard.table.actions") %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @users.each do |user| %>
+          <tr>
+            <td>#<%= user.id %></td>
+            <td>
+              <div style="width: 32px; height: 32px; background: white; border: 2px solid black; border-radius: 50%; overflow: hidden; display: flex; align-items: center; justify-content: center;">
+                <% if user.profile_picture.attached? %>
+                  <%= image_tag user.profile_picture, style: "width: 120%; height: 100%; object-fit: cover; image-rendering: pixelated;" %>
+                <% else %>
+                  <%= image_tag "default_trainer.png", style: "width: 140%; image-rendering: pixelated; margin-top: 2px;" %>
+                <% end %>
+              </div>
+            </td>
+            <td><%= user.username %></td>
+            <td><%= user.email_address %></td>
+            <td>
+              <span class="card-count-badge">
+                <%= user.listings.size %> 
+
+              </span>
+            </td>
+            <td>
+              <div class="status-indicator">
+                <span class="status-light <%= user.online? ? 'online' : 'offline' %>"></span>
+                <%= user.online? ? t("admin.dashboard.status.online") : t("admin.dashboard.status.offline") %>
+                <% if user.banned? %>
+                  <span style="color: #E3350D; font-size: 7px; margin-left: 5px;">[<%= t("admin.dashboard.status.banned") %>]</span>
+                <% end %>
+              </div>
+            </td>
+            <td>
+              <div style="display: flex; gap: 8px;">
+                <%= link_to t("admin.dashboard.actions.view", default: "Ver"), admin_user_path(user), class: "admin-btn-blue btn-interactive" %>
+                <% if user.banned? %>
+                  <%= button_to t("admin.dashboard.actions.unban"), unban_admin_user_path(user), method: :patch, class: "admin-btn-yellow btn-interactive" %>
+                <% else %>
+                  <%= button_to t("admin.dashboard.actions.ban"), ban_admin_user_path(user), method: :patch, class: "admin-btn-red btn-interactive" %>
+                <% end %>
+
+                <%= button_to t("admin.dashboard.actions.delete"), admin_user_path(user), method: :delete, 
+                              form: { data: { turbo_confirm: t("admin.dashboard.actions.confirm_delete") } }, 
+                              class: "admin-btn-black btn-interactive" %>
+              </div>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

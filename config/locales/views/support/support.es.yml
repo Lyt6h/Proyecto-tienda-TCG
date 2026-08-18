@@ -1,0 +1,33 @@
+es:
+  support:
+    title: "SOPORTE"
+    name_placeholder: "Tu Nombre"
+    email_placeholder: "Tu Correo Electrónico"
+    message_placeholder: "¿En qué podemos ayudarte?"
+    submit: "ENVIAR MENSAJE"
+    back: "VOLVER AL INICIO"
+    notices:
+      success: "Mensaje enviado correctamente. Te contactaremos pronto."
+      error: "Por favor, rellena todos los campos."
+    admin:
+      mailbox_btn: "📥 BUZÓN DE SOPORTE"
+      title: "BUZÓN DE SOPORTE"
+      no_messages: "NO HAY MENSAJES DE SOPORTE"
+      table:
+        date: "FECHA"
+        name: "NOMBRE"
+        message: "MENSAJE"
+        status: "ESTADO"
+        actions: "ACCIONES"
+      status:
+        resolved: "RESUELTO"
+        pending: "PENDIENTE"
+      actions:
+        reply: "📧 RESPONDER"
+        resolve: "✅ RESOLVER"
+        reopen: "🔄 REABRIR"
+        delete_confirm: "¿Eliminar este mensaje definitivamente?"
+      notices:
+        updated: "Mensaje actualizado."
+        update_error: "No se pudo actualizar el mensaje."
+        deleted: "Mensaje eliminado."

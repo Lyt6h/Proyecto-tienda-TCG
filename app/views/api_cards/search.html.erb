@@ -1,0 +1,146 @@
+<style>
+  .loader-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.8);
+    z-index: 10000;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Pokéball Spinner */
+  .pokeball-spinner {
+    width: 80px;
+    height: 80px;
+    background-color: #fff;
+    border-radius: 50%;
+    border: 5px solid #333;
+    position: relative;
+    overflow: hidden;
+    animation: spin 1s linear infinite;
+    box-shadow: inset -5px 5px 0 rgba(0,0,0,0.1);
+  }
+
+  .pokeball-spinner::before {
+    content: "";
+    position: absolute;
+    background-color: #E3350D;
+    width: 100%;
+    height: 50%;
+    border-bottom: 5px solid #333;
+    top: 0;
+  }
+
+  .pokeball-spinner::after {
+    content: "";
+    position: absolute;
+    background-color: #fff;
+    width: 20px;
+    height: 20px;
+    border: 5px solid #333;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+  }
+
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  .loading-text {
+    font-family: 'Press Start 2P', cursive;
+    color: white;
+    font-size: 10px;
+    margin-top: 20px;
+    text-transform: uppercase;
+  }
+</style>
+
+<div id="loading-overlay" class="loader-overlay">
+  <div class="pokeball-spinner"></div>
+  <div class="loading-text">Buscando en el PC de Bill...</div>
+</div>
+
+<div class="pokedex-background" style="background-color: #E3350D; padding: 20px; min-height: 100vh; padding-top: 120px;">
+  <div class="pokedex-frame" style="background: white; border: 8px solid black; border-radius: 20px; padding: 30px; box-shadow: 10px 10px 0px rgba(0,0,0,0.2); max-width: 1000px; margin: 0 auto;">
+    
+    <h1 style="font-family: 'Press Start 2P', cursive; font-size: 18px; text-align: center; margin-bottom: 30px; color: #333;">
+      <%= t("api.title") %>
+    </h1>
+
+    <div style="margin-bottom: 40px; padding: 20px; background: #eee; border: 4px solid black; border-radius: 10px; text-align: center;">
+      <%= form_with url: api_cards_search_path, method: :get, local: true, html: { onsubmit: "document.getElementById('loading-overlay').style.display = 'flex';" } do |f| %>
+        <%= f.text_field :query, value: params[:query], placeholder: t("api.placeholder_search"), class: "btn-interactive",
+            style: "font-family: 'Press Start 2P', cursive; font-size: 10px; padding: 12px; width: 60%; border: 3px solid black; border-radius: 5px; outline: none;" %>
+        <%= f.submit t("api.search"), class: "btn-interactive", style: "background: #E3350D; color: white; border: 3px solid black; padding: 12px 20px; cursor: pointer; font-family: 'Press Start 2P', cursive; font-size: 10px; margin-left: 10px; border-radius: 5px;" %>
+      <% end %>
+    </div>
+
+    <% if @api_cards.any? %>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+        <% @api_cards.each do |api_card| %>
+          <div style="border: 4px solid black; padding: 20px; border-radius: 10px; background: #fff; display: flex; gap: 20px; box-shadow: 5px 5px 0px #ccc;">
+            <div style="flex: 0 0 150px;">
+              <img src="<%= api_card.images.small %>" style="width: 100%; border: 2px solid black; image-rendering: pixelated;">
+            </div>
+
+            <div style="flex: 1;">
+              <h3 style="font-family: 'Press Start 2P', cursive; font-size: 12px; margin-top: 0;"><%= api_card.name %></h3>
+              <p style="font-family: 'Press Start 2P', cursive; font-size: 7px; color: #666; margin: 5px 0;">Set: <%= api_card.set.name %></p>
+              <p style="font-family: 'Press Start 2P', cursive; font-size: 7px; color: #666; margin: 5px 0;">N°: <%= api_card.number %>/<%= api_card.set&.printed_total %></p>
+
+              <hr style="border: 1px dashed black; margin: 15px 0;">
+
+              <%= form_with url: api_cards_create_listing_path, method: :post, local: true do |f| %>
+                <%= f.hidden_field :name, value: api_card.name %>
+                <%= f.hidden_field :card_number, value: "#{api_card.number}/#{api_card.set&.printed_total}" %>
+                <%= f.hidden_field :expansion, value: api_card.set&.name %>
+                <%= f.hidden_field :rarity, value: api_card.rarity %>
+                <%= f.hidden_field :energy_type, value: api_card.types&.first || 'Normal' %>
+                <%= f.hidden_field :release_year, value: api_card.set&.release_date&.split('/')&.first %>
+                <%= f.hidden_field :image_url, value: api_card.images&.large %>
+
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                  <div style="display: flex; align-items: center; justify-content: space-between;">
+                    <label style="font-family: 'Press Start 2P', cursive; font-size: 7px;"><%= t("products.form.price") %>:</label>
+                    <%= f.number_field :price, placeholder: "0.00", step: 0.01, required: true, 
+                        style: "width: 80px; padding: 5px; border: 2px solid black; font-family: 'Press Start 2P'; font-size: 8px;" %>
+                  </div>
+
+                  <div style="display: flex; align-items: center; justify-content: space-between;">
+                    <label style="font-family: 'Press Start 2P', cursive; font-size: 7px;">STOCK:</label>
+                    <%= f.number_field :stock, value: 1, min: 1, required: true,
+                        style: "width: 80px; padding: 5px; border: 2px solid black; font-family: 'Press Start 2P'; font-size: 8px;" %>
+                  </div>
+
+                  <div style="display: flex; align-items: center; justify-content: space-between;">
+                    <label style="font-family: 'Press Start 2P', cursive; font-size: 7px;"><%= t("products.form.psa") %>:</label>
+                    <%= f.select :condition, ["Mint", "Near Mint", "Played"], {}, 
+                        style: "width: 95px; padding: 5px; border: 2px solid black; font-family: 'Press Start 2P'; font-size: 7px; cursor: pointer;" %>
+                  </div>
+
+                  <%= f.submit t("products.titles.sell"), class: "btn-interactive", style: "background: #4CAF50; color: white; border: 3px solid black; padding: 10px; cursor: pointer; font-family: 'Press Start 2P', cursive; font-size: 8px; margin-top: 10px; border-radius: 5px;" %>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% elsif params[:query].present? %>
+      <p style="text-align: center; font-family: 'Press Start 2P'; font-size: 10px; color: #E3350D;">NO SE ENCONTRARON RESULTADOS.</p>
+    <% end %>
+
+    <div style="text-align: center; margin-top: 40px;">
+      <%= link_to t("api.go_back"), my_products_products_path, 
+          style: "color: black; font-family: 'Press Start 2P', cursive; font-size: 8px; text-decoration: none; border-bottom: 2px solid black;" %>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,30 @@
+<div class="poke-page">
+  <div class="pokeball-container">
+    <div class="cap top-cap"><div class="cutout"></div></div>
+
+    <div class="screen-content">
+      <div class="logo-box">
+        <h2 class="welcome-msg"><%= t("passwords.new.title") %></h2>
+        <p style="font-size: 7px; color: #666; margin-bottom: 15px; line-height: 1.5;"><%= t("passwords.new.help_text") %></p>
+      </div>
+
+      <%= form_with url: passwords_path, class: "condensed-form" do |f| %>
+        <div class="poke-field">
+          <span class="icon">🔴</span>
+          <%= f.email_field :email_address, placeholder: t("passwords.new.email_placeholder"), class: "p-input", required: true %>
+        </div>
+
+        <div class="btn-container">
+          <%= f.submit t("passwords.new.submit"), class: "p-submit" %>
+          <div class="btn-dot"></div>
+        </div>
+      <% end %>
+
+      <div class="poke-footer">
+        <%= link_to t("passwords.new.back_to_login"), new_session_path, class: "p-link bold" %>
+      </div>
+    </div>
+
+    <div class="cap bottom-cap"><div class="cutout"></div></div>
+  </div>
+</div>
